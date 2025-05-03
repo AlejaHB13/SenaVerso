@@ -68,7 +68,7 @@ export default function Quiz() {
   const cerrarModalYRedirigir = () => {
     setMostrarModal(false);
     setTimeout(() => {
-      window.location.href = "/juego1"; // Redirige a la isla
+      window.location.href = "/isla"; // Redirige a la isla
     }, 500);
   };
 

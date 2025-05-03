@@ -24,20 +24,23 @@ const letters: Card[] = [
   { id: "B", type: "letter", content: "B" },
   { id: "C", type: "letter", content: "C" },
   { id: "D", type: "letter", content: "D" },
-  { id: "E", type: "letter", content: "E" },
-  { id: "F", type: "letter", content: "F" },
   { id: "A-sign", type: "sign", content: "/a.png", pair: "A" },
   { id: "B-sign", type: "sign", content: "/b.png", pair: "B" },
   { id: "C-sign", type: "sign", content: "/c.png", pair: "C" },
-  { id: "D-sign", type: "sign", content: "/d.png", pair: "D" },
-  { id: "E-sign", type: "sign", content: "/e.png", pair: "E" },
-  { id: "F-sign", type: "sign", content: "/f.png", pair: "F" }
 ];
+
+// Mapa de mensajes personalizados
+const pairMessages: Record<string, { message: string; image: string }> = {
+  A: { message: "¡Lograste llegar al cultivo!", image: "/.png" },
+  B: { message: "¡Lograste preparar la tierra!", image: "/.png" },
+  C: { message: "¡Lograste sembrar las semillas!", image: "/.png" },
+  D: { message: "¡Lograste tener todo el cultivo!", image: "/.png" },
+};
 
 const useGameStore = create<GameState>((set) => ({
   matchedPairs: [],
   addMatch: (pair: string) => set((state) => ({ matchedPairs: [...state.matchedPairs, pair] })),
-  resetGame: () => set({ matchedPairs: [] })
+  resetGame: () => set({ matchedPairs: [] }),
 }));
 
 const menuItems = [
@@ -51,7 +54,7 @@ export default function MemoryGame() {
   const [flipped, setFlipped] = useState<Card[]>([]);
   const [disabled, setDisabled] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
-  const [showPairMessage, setShowPairMessage] = useState(false);
+  const [currentPairMessage, setCurrentPairMessage] = useState<{ message: string; image: string } | null>(null); // Estado para el mensaje actual
   const matchedPairs = useGameStore((state) => state.matchedPairs);
   const addMatch = useGameStore((state) => state.addMatch);
   const resetGame = useGameStore((state) => state.resetGame);
@@ -67,8 +70,8 @@ export default function MemoryGame() {
         (second.type === "letter" && first.pair === second.content)
       ) {
         addMatch(first.content);
-        setShowPairMessage(true);
-        setTimeout(() => setShowPairMessage(false), 1500);
+        setCurrentPairMessage(pairMessages[first.content]); // Establece el mensaje correspondiente
+        setTimeout(() => setCurrentPairMessage(null), 1500); // Oculta el mensaje después de 1.5 segundos
       }
 
       setTimeout(() => {
@@ -82,7 +85,7 @@ export default function MemoryGame() {
     if (matchedPairs.length === letters.filter((c) => c.type === "letter").length) {
       fetch("/api/progreso", {
         method: "POST",
-        body: JSON.stringify({ leccion: "juego1", categoria: "abecedario" }),
+        body: JSON.stringify({ leccion: "juego2", categoria: "animales" }),
         headers: { "Content-Type": "application/json" },
       });
       setShowMessage(true);
@@ -137,8 +140,8 @@ export default function MemoryGame() {
       <div className="flex flex-1 justify-between p-20">
         {/* Left Section: Text and Game */}
         <div className="flex flex-col items-center w-2/3">
-          <h1 className="text-black font-bold">Ayuda a Mani a encontrar diamantes de la isla</h1>
-          <h3 className="text-black font-bold">Debes realizar las parejas respectivas con cada seña y letra</h3>
+          <h1 className="text-black font-bold">Ayuda a Mani cultivar en la granja</h1>
+          <h3 className="text-black font-bold">Debes realizar las parejas respectivas con cada seña y animal</h3>
           <div className="grid grid-cols-3 gap-6 mt-8">
             {letters.map((card) => (
               <MemoryCard
@@ -157,7 +160,7 @@ export default function MemoryGame() {
         {/* Right Section: Large Image */}
         <div className="flex items-center justify-center w-1/3">
           <Image
-            src="/piratamani.png"
+            src="/granja.png"
             alt="Imagen grande"
             width={600}
             height={600}
@@ -170,7 +173,7 @@ export default function MemoryGame() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <h2 className="text-2xl font-bold text-black">¡Felicidades!</h2>
-            <p className="text-black">Logramos encontrar todos los diamantes. Completaste la misión</p>
+            <p className="text-black">Logramos recolectar toda el cultivo.</p>
             <button
               className="mt-4 px-4 py-2 bg-[#facc17] text-white rounded"
               onClick={handleCloseMessage}
@@ -180,11 +183,11 @@ export default function MemoryGame() {
           </div>
         </div>
       )}
-      {showPairMessage && (
+      {currentPairMessage && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-lg shadow-lg text-center flex flex-col items-center">
-            <Image src="/diamante.png" alt="¡Acierto!" width={100} height={100} className="mb-4" />
-            <h2 className="text-xl font-bold text-black">¡Encontraste un diamante!</h2>
+            <Image src={currentPairMessage.image} alt="¡Acierto!" width={100} height={100} className="mb-4" />
+            <h2 className="text-xl font-bold text-black">{currentPairMessage.message}</h2>
           </div>
         </div>
       )}
@@ -202,7 +205,7 @@ function MemoryCard({ card, flipped, onFlip }: MemoryCardProps) {
   return (
     <div className="flex">
       <motion.div
-        className="w-24 h-24 border-2 rounded-lg flex items-center justify-center cursor-pointer bg-yellow-400"
+        className="w-24 h-24 border-2 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e]"
         animate={{ rotateY: flipped ? 180 : 0 }}
         transition={{ duration: 0.5 }}
         onClick={onFlip}

@@ -33,7 +33,7 @@ export default function Home() {
                 ×
               </button>
 
-              <div className="relative w-full max-w-lg mx-auto">
+                <div className="relative w-[90%] max-w-lg mx-auto">
                 {/* Imagen de fondo */}
                 <img
                   src="/instrucciones.png" // Asegúrate de que la URL sea correcta
@@ -44,7 +44,7 @@ export default function Home() {
                 {/* Contenedor de texto centrado */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] p-4 bg-white bg-opacity-0 text-center">
                   <p className="text-black text-lg font-bold leading-tight">
-                   
+                 Haz clic en los íconos de las monedas para realizar cada actividad y en volcan podras encontrar otra aventura.
                   </p>
                 </div>
               </div>

@@ -1,113 +1,93 @@
-"use client"
-import { useState } from "react";
-import Image from "next/image"; 
-
-const cuentos = [
-  {
-    id: 1,
-    title: "Patito feo",
-    youtubeId: "jyRVSyzz6l8?si=Z8xjAsRol3hrsqlo",
-    image: "/patocuento.jpg", 
-  },
-  {
-    id: 2,
-    title: "El pirata y el tesoro escondido",
-    youtubeId: "dPTVEKrAW0M?si=JApRBrDFRQiz4K7T",
-    image: "/piratacuento.jpg", 
-  },
-  {
-    id: 3,
-    title: "El zapatero y los duendes",
-    youtubeId: "DS0uZ76HUCI?si=atNTChJY9mPgLJba",
-    image: "/zapaterocuento.jpg", 
-  },
-  {
-    id: 4,
-    title: "Ricitos de oro y los tres osos",
-    youtubeId: "Qf028XI_cEQ?si=KlTEaFBH2kPRdShF",
-    image: "/ricitoscuento.jpg", 
-  },
-  {
-    id: 5,
-    title: "Hansel y Gretel",
-    youtubeId: "HMtd6qULsGE?si=NaL0OQYPB9s4S5_j",
-    image: "/hanzelcuento.jpeg", 
-  },
-  {
-    id: 6,
-    title: "Caperucita roja",
-    youtubeId: "v0CWV_BSszQ?si=URcZPtuyh3iYhAn-",
-    image: "/caperucita.jpeg", 
-  },
-];
+"use client";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
 const menuItems = [
-    { label: "LECCIONES", icon: "/lecciones.png", link: "/lecciones" },
-    { label: "CANCIONES", icon: "/musica.png", link: "/canciones" },
-    { label: "CUENTOS", icon: "/cuento.png", link: "/cuento" },
-    { label: "PERFIL", icon: "/perfil.png", link: "/dashboard" },
-  ];
-
+  { label: "LECCIONES", icon: "/lecciones.png", link: "/lecciones" },
+  { label: "CANCIONES", icon: "/musica.png", link: "/canciones" },
+  { label: "CUENTOS", icon: "/cuento.png", link: "/cuento" },
+  { label: "PERFIL", icon: "/perfil.png", link: "/dashboard" },
+];
 
 export default function Cuentos() {
+  const [cuentos, setCuentos] = useState<any[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchCuentos() {
+      try {
+        const response = await fetch("/api/cuentos");
+        if (!response.ok) throw new Error("Error al obtener cuentos");
+        const data = await response.json();
+        setCuentos(data);
+      } catch (error) {
+        console.error("Error cargando cuentos:", error);
+      }
+    }
+
+    fetchCuentos();
+  }, []);
 
   return (
     <div className="flex">
-              <aside className="w-48 h-screen bg-white border-r flex flex-col items-center py-10">
-                        <Image
-                          src="/logo.png" // Asegúrate de tener esta imagen en public/images/
-                          alt="Logo El Mundo de las Señas"
-                          width={120}
-                          height={120}
-                          className="mb-10"
-                        />
-                        <nav className="w-full flex flex-col items-start px-4 space-y-8">
-                          {menuItems.map((item) => (
-                            <a
-                              key={item.label}
-                              href={item.link}
-                              className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
-                            >
-                              <Image
-                                src={item.icon}
-                                alt={item.label}
-                                width={50}
-                                height={50}
-                                className="object-contain"
-                              />
-                              <span>{item.label}</span>
-                            </a>
-                          ))}
-                        </nav>
-                      </aside>
-    
-    <div className="mflex-1 p-8 text-center font-bold text-2xl text-black mb-8">
+      <aside className="w-48 h-screen bg-white border-r flex flex-col items-center py-10">
         
-      <h1 className="text-3xl font-bold text-[#69FF37] mb-8">Cuentos</h1>
+        <Image src="/logo.png" alt="Logo El Mundo de las Señas" width={120} height={120} />
+        <h2 className="text-center font-semibold text-[#69FF37]">SeñaVerso</h2>
+        <h3 className="text-center text-[#69FF37] text-xs mb-8">Explora el mundo en señas</h3>
+        <nav className="w-full flex flex-col items-start px-6 space-y-8 mb-6">
+          {menuItems.map((item) => (
+            <a key={item.label} href={item.link} className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black">
+              <Image src={item.icon} alt={item.label} width={50} height={50} className="object-contain" />
+              <span>{item.label}</span>
+            </a>
+          ))}
+        </nav>
+      </aside>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
-        {cuentos.map((cuento) => (
-          <div
-            key={cuento.id}
-            className="bg-gray-100 rounded-xl shadow-lg p-4 cursor-pointer hover:shadow-2xl transition"
-            onClick={() => setSelectedVideo(cuento.youtubeId)}
-          >
-            <Image
-              src={cuento.image} // ✅ Ahora usando el componente Image de Next.js
-              alt={cuento.title}
-              width={500}
-              height={300}
-              className="rounded-lg mb-3 w-full h-48 object-cover"
-              priority
-            />
-            <h2 className="font-semibold text-gray-800 text-lg text-center">
-              {cuento.title}
-            </h2>
+      <div className="flex-1 p-10 text-center font-bold text-2xl text-black mb-8">
+        <h1 className="text-3xl font-bold text-[#69FF37] mb-8">Cuentos</h1>
+
+        {cuentos.length === 0 ? (
+          <p className="text-gray-500">Cargando cuentos...</p>
+        ) : (
+          // Contenedor principal con la imagen centrada y los cuentos a los lados
+          <div className="flex justify-center items-center gap-6">
+            {/* Lista de cuentos (izquierda) */}
+            <div className="flex-1 grid grid-cols-1 gap-6 text-center">
+              {cuentos.slice(0, Math.ceil(cuentos.length / 2)).map((cuento, index) => (
+                <div
+                  key={cuento._id || `cuento-izq-${index}`}
+                  className="bg-gray-100 rounded-xl shadow-lg p-4 cursor-pointer hover:shadow-2xl transition"
+                  onClick={() => setSelectedVideo(cuento.youtubeId)}
+                >
+                  <h2 className="font-semibold text-gray-800 text-lg">{cuento.title}</h2>
+                </div>
+              ))}
+            </div>
+
+            {/* Imagen centrada con espacio hacia abajo */}
+            <div className="mb-10">
+              <img src="/cuento2.png" alt="Pirata" width={450} height={450} className="mx-auto" />
+            </div>
+
+            {/* Lista de cuentos (derecha) */}
+            <div className="flex-1 grid grid-cols-1 gap-6 text-center">
+              {cuentos.slice(Math.ceil(cuentos.length / 2)).map((cuento, index) => (
+                <div
+                  key={cuento._id || `cuento-der-${index}`}
+                  className="bg-gray-100 rounded-xl shadow-lg p-4 cursor-pointer hover:shadow-2xl transition"
+                  onClick={() => setSelectedVideo(cuento.youtubeId)}
+                >
+                  <h2 className="font-semibold text-gray-800 text-lg">{cuento.title}</h2>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        )}
       </div>
 
+      {/* Modal para mostrar el video cuando se selecciona un cuento */}
       {selectedVideo && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-4 w-full max-w-6xl relative">
@@ -121,7 +101,7 @@ export default function Cuentos() {
               <iframe
                 className="w-full h-full rounded-lg"
                 src={`https://www.youtube.com/embed/${selectedVideo}`}
-                title="Video de cuento"
+                title="Video de canción"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -131,7 +111,7 @@ export default function Cuentos() {
         </div>
       )}
     </div>
-    </div>
   );
 }
+
 

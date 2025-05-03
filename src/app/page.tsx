@@ -6,9 +6,7 @@ export default function Home() {
     <div>
         <Navbar />
     <div className="flex flex-col min-h-screen bg-white text-black p-6">
-      <div className="flex flex-col items-center text-center mb-2">
-          <Image src="/logo.png" alt="Logo" width={350} height={350} className="mb-4" />  
-    </div> 
+
     <div className="flex flex-col sm:flex-row items-center justify-center text-left">
   {/* Imagen a la izquierda */}
   <Image

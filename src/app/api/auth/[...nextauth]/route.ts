@@ -19,9 +19,9 @@ const handler = NextAuth({
                 console.log(credentials);
 
                 const userFound = await User.findOne({email: credentials?.email,}).select("+password"); 
-                if (!userFound) throw new Error("Invalid credentials"); 
+                if (!userFound) throw new Error("El correo es incorrecto"); 
                 const passwordMatch = await bcrypt.compare(credentials!.password, userFound.password) 
-                if (!passwordMatch) throw new Error("Invalid credentials"); 
+                if (!passwordMatch) throw new Error("La contraseña es incorrecta"); 
                 console.log(userFound) 
                 return userFound
             },

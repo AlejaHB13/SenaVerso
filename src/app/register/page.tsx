@@ -47,6 +47,11 @@ function RegisterPage() {
          {/* Sección del logo */}
     <div className="flex flex-col items-center">
       <img src="/logo.png" alt="El Mundo de las Señas" className="w-120" />
+      <h2 className="text-center  font-semibold text-[#69FF37]">
+                 SeñaVerso </h2>
+               <h3 className="text-center text-[#69FF37] text-xs  mb-8">
+                 Explora el mundo en señas
+               </h3>
     </div>
           {/* Sección del formulario */}
           <div className="bg-white p-8 rounded shadow-md w-80">

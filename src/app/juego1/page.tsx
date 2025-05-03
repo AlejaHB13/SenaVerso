@@ -1,0 +1,198 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { create } from "zustand";
+import Image from "next/image";
+
+interface Card {
+  id: string;
+  type: "letter" | "sign";
+  content: string;
+  pair?: string;
+}
+
+interface GameState {
+  matchedPairs: string[];
+  addMatch: (pair: string) => void;
+  resetGame: () => void;
+}
+
+const letters: Card[] = [
+  { id: "A", type: "letter", content: "A" },
+  { id: "B", type: "letter", content: "B" },
+  { id: "C", type: "letter", content: "C" },
+  { id: "D", type: "letter", content: "D" },
+  { id: "E", type: "letter", content: "E" },
+  { id: "F", type: "letter", content: "F" },
+  { id: "A-sign", type: "sign", content: "/a.png", pair: "A" },
+  { id: "B-sign", type: "sign", content: "/b.png", pair: "B" },
+  { id: "C-sign", type: "sign", content: "/c.png", pair: "C" },
+  { id: "D-sign", type: "sign", content: "/d.png", pair: "D" },
+  { id: "E-sign", type: "sign", content: "/e.png", pair: "E" },
+  { id: "F-sign", type: "sign", content: "/f.png", pair: "F" }
+];
+
+const useGameStore = create<GameState>((set) => ({
+  matchedPairs: [],
+  addMatch: (pair: string) => set((state) => ({ matchedPairs: [...state.matchedPairs, pair] })),
+  resetGame: () => set({ matchedPairs: [] })
+}));
+
+const menuItems = [
+  { label: "LECCIONES", icon: "/lecciones.png", link: "/lecciones" },
+  { label: "CANCIONES", icon: "/musica.png", link: "/canciones" },
+  { label: "CUENTOS", icon: "/cuento.png", link: "/cuento" },
+  { label: "PERFIL", icon: "/perfil.png", link: "/dashboard" },
+];
+
+
+export default function MemoryGame() {
+  const [flipped, setFlipped] = useState<Card[]>([]);
+  const [disabled, setDisabled] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const matchedPairs = useGameStore((state) => state.matchedPairs);
+  const addMatch = useGameStore((state) => state.addMatch);
+  const resetGame = useGameStore((state) => state.resetGame);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (flipped.length === 2) {
+      setDisabled(true);
+      const [first, second] = flipped;
+
+      if (
+        (first.type === "letter" && second.pair === first.content) ||
+        (second.type === "letter" && first.pair === second.content)
+      ) {
+        addMatch(first.content);
+      }
+
+      setTimeout(() => {
+        setFlipped([]);
+        setDisabled(false);
+      }, 1000);
+    }
+  }, [flipped, addMatch]);
+
+  useEffect(() => {
+    if (matchedPairs.length === letters.filter((c) => c.type === "letter").length) {
+      fetch("/api/progreso", {
+        method: "POST",
+        body: JSON.stringify({ leccion: "juego1", categoria: "abecedario" }),
+        headers: { "Content-Type": "application/json" },
+      });
+      setShowMessage(true);
+    }
+  }, [matchedPairs]);
+
+  const handleFlip = (card: Card) => {
+    if (
+      flipped.length < 2 &&
+      !flipped.some((c) => c.id === card.id) &&
+      !matchedPairs.includes(card.pair ?? card.content) &&
+      !disabled
+    ) {
+      setFlipped((prev) => [...prev, card]);
+    }
+  };
+
+  const handleCloseMessage = () => {
+    setShowMessage(false);
+    resetGame();
+    router.push("/lecciones");
+  };
+
+  return (
+    <div className="flex">
+       <button
+                     onClick={() => router.push("/isla")}
+                     className="absolute top-4 right-4  text-black px-2 py-2 rounded-lg  transition-all"
+                   >
+                    <Image
+                 src="/flecha.png" // Cambia esta ruta a la imagen que deseas usar
+                 alt="Volver"
+                 width={70}
+                 height={70}
+                 className="object-contain"
+               />
+                   </button>
+    <aside className="w-48 h-screen bg-white border-r flex flex-col items-center py-10">
+    <Image src="/logo.png" alt="Logo El Mundo de las Señas" width={120} height={120} />
+    <h2 className="text-center font-semibold text-[#69FF37]">SeñaVerso</h2>
+    <h3 className="text-center text-[#69FF37] text-xs mb-8">Explora el mundo en señas</h3>
+    <nav className="w-full flex flex-col items-start px-6 space-y-8 mb-6">
+      {menuItems.map((item) => (
+        <a key={item.label} href={item.link} className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black">
+          <Image src={item.icon} alt={item.label} width={50} height={50} className="object-contain" />
+          <span>{item.label}</span>
+        </a>
+      ))}
+    </nav>
+  </aside>
+
+    <div className="flex flex-col items-center p-20">
+      <h1 className="text-black font-bold">Ayuda a Mani a salir de la isla</h1>
+      <h3 className="text-black font-bold">Debes realizar las parejas respectivas con cada seña y letra</h3>
+      <div className="grid grid-cols-3 gap-6 mt-8">
+        {letters.map((card) => (
+          <MemoryCard
+            key={card.id}
+            card={card}
+            flipped={
+              flipped.includes(card) ||
+              matchedPairs.includes(card.pair ?? card.content)
+            }
+            onFlip={() => handleFlip(card)}
+          />
+        ))}
+        </div>
+        </div>
+      {showMessage && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-2xl font-bold">¡Felicidades!</h2>
+            <p>Logramos salir de la isla gracias por ayudarme en esta misión</p>
+            <button
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              onClick={handleCloseMessage}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface MemoryCardProps {
+  card: Card;
+  flipped: boolean;
+  onFlip: () => void;
+}
+
+function MemoryCard({ card, flipped, onFlip }: MemoryCardProps) {
+  return (
+    <div className="flex">
+   
+    <motion.div
+      className="w-24 h-24 border-2 rounded-lg flex items-center justify-center cursor-pointer bg-yellow-400"
+      animate={{ rotateY: flipped ? 180 : 0 }}
+      transition={{ duration: 0.5 }}
+      onClick={onFlip}
+    >
+      {flipped ? (
+        card.type === "letter" ? (
+          <span className="text-xl font-bold">{card.content}</span>
+        ) : (
+          <img src={card.content} alt="Seña" className="w-16" />
+        )
+      ) : (
+        <span className="text-black">?</span>
+      )}
+    </motion.div>
+    </div>
+  );
+}

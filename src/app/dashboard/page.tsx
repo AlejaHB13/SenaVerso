@@ -118,7 +118,7 @@ function ProfilePage() {
                               className="border-b border-gray-300 pb-2 mb-2"
                             >
                               <h4 className="text-md font-medium text-gray-800">
-                                Lección: {p.leccion} {p.completado ? "✅" : "✅"}
+                                {p.leccion} {p.completado ? "✅" : "✅"}
                               </h4>
                               {p.actividades.length > 0 && (
                                 <ul className="mt-2 text-gray-700 text-sm">

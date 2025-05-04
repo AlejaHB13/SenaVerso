@@ -20,21 +20,19 @@ interface GameState {
 }
 
 const letters: Card[] = [
-  { id: "A", type: "letter", content: "A" },
-  { id: "B", type: "letter", content: "B" },
-  { id: "C", type: "letter", content: "C" },
-  { id: "D", type: "letter", content: "D" },
-  { id: "A-sign", type: "sign", content: "/a.png", pair: "A" },
-  { id: "B-sign", type: "sign", content: "/b.png", pair: "B" },
-  { id: "C-sign", type: "sign", content: "/c.png", pair: "C" },
+  { id: "A", type: "letter", content: "/a-image.png" }, // Imagen para la letra A
+  { id: "B", type: "letter", content: "/b-image.png" }, // Imagen para la letra B
+  { id: "C", type: "letter", content: "/c-image.png" }, // Imagen para la letra C
+  { id: "C-sign", type: "sign", content: "/c-video.mp4", pair: "C" }, // Video para la seña C
+  { id: "A-sign", type: "sign", content: "/a-video.mp4", pair: "A" }, // Video para la seña A
+  { id: "B-sign", type: "sign", content: "/b-video.mp4", pair: "B" }, // Video para la seña B
 ];
 
 // Mapa de mensajes personalizados
 const pairMessages: Record<string, { message: string; image: string }> = {
   A: { message: "¡Lograste llegar al cultivo!", image: "/.png" },
-  B: { message: "¡Lograste preparar la tierra!", image: "/.png" },
-  C: { message: "¡Lograste sembrar las semillas!", image: "/.png" },
-  D: { message: "¡Lograste tener todo el cultivo!", image: "/.png" },
+  B: { message: "¡Lograste sembrar las semillas!", image: "/.png" },
+  C: { message: "¡Lograste tener todo el cultivo!", image: "/.png" },
 };
 
 const useGameStore = create<GameState>((set) => ({
@@ -112,7 +110,7 @@ export default function MemoryGame() {
   return (
     <div className="flex">
       <button
-        onClick={() => router.push("/isla")}
+        onClick={() => router.push("/granja")}
         className="absolute top-4 right-4 text-black px-2 py-2 rounded-lg transition-all"
       >
         <Image
@@ -160,7 +158,7 @@ export default function MemoryGame() {
         {/* Right Section: Large Image */}
         <div className="flex items-center justify-center w-1/3">
           <Image
-            src="/granja.png"
+            src="/mano3.png"
             alt="Imagen grande"
             width={600}
             height={600}
@@ -202,24 +200,28 @@ interface MemoryCardProps {
 }
 
 function MemoryCard({ card, flipped, onFlip }: MemoryCardProps) {
+  const isSelected = flipped; // Determina si la tarjeta está seleccionada
+
   return (
     <div className="flex">
-      <motion.div
-        className="w-24 h-24 border-2 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e]"
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.5 }}
+      <div
+        className={`w-24 h-24 border-2 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e] transition-all ${
+          isSelected ? "border-[#69FF37] shadow-lg" : "border-gray-300"
+        }`}
         onClick={onFlip}
       >
-        {flipped ? (
-          card.type === "letter" ? (
-            <span className="text-xl font-bold">{card.content}</span>
-          ) : (
-            <img src={card.content} alt="Seña" className="w-16" />
-          )
+        {card.type === "letter" ? (
+          <img src={card.content} alt="Imagen" className="w-16 h-16 object-contain" />
         ) : (
-          <span className="text-black">?</span>
+          <video
+            src={card.content}
+            className="w-16 h-16 object-contain"
+            autoPlay
+            loop
+            muted
+          />
         )}
-      </motion.div>
+      </div>
     </div>
   );
 }

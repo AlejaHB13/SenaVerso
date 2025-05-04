@@ -29,15 +29,15 @@ export default function Jardin() {
             <div className="relative w-[90%] max-w-lg mx-auto">
               {/* Imagen de fondo */}
               <img
-                src="/instrucciones.png" // Asegúrate de que la URL sea correcta
-                alt="Pergamino"
+                src="/hoja2.png" // Asegúrate de que la URL sea correcta
+                alt="hoja2"
                 className="w-full h-auto rounded-lg"
               />
 
               {/* Contenedor de texto centrado */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] p-4 bg-white bg-opacity-0 text-center">
-                <p className="text-black text-lg font-bold leading-tight">
-                  Haz clic en los íconos de las monedas para realizar cada actividad y en volcan podras encontrar otra aventura.
+                <p className="text-black text-sm font-bold leading-tight">
+                  Haz clic en los íconos de las flores para realizar cada actividad y en la palita encontraras otra aventura.
                 </p>
               </div>
             </div>
@@ -96,15 +96,53 @@ export default function Jardin() {
             >
               ?
             </button>
-
-            <Link href="/colores" className="absolute top-[80%] left-[50%] hover:scale-110 transition-transform">
-              <Image src="/flor.png" alt="Actividad 1" width={70} height={70} />
+            <Link href="/quizcolores" className="absolute bottom-[10%] right-[15%] hover:scale-110 transition-transform">
+              <div className="p-4  rounded-full drop-shadow-lg hover:animate-pulse hover:brightness-125">
+                <Image
+                  src="/flor.png"
+                  alt="Actividad 1"
+                  width={70}
+                  height={70}
+                  className="object-contain"
+                />
+              </div>
             </Link>
-            <Link href="/quizcolores" className="absolute top-[80%] left-[90%] hover:scale-110 transition-transform">
-              <Image src="/flor.png" alt="Actividad 2" width={70} height={70} />
+            <Link href="/colores" className="absolute bottom-[10%] top-[75%] right-[40%] hover:scale-110 transition-transform">
+              <div className="p-4  rounded-full drop-shadow-lg hover:animate-pulse hover:brightness-125">
+                <Image
+                  src="/flor.png"
+                  alt="Actividad 1"
+                  width={70}
+                  height={70}
+                  className="object-contain"
+                />
+              </div>
             </Link>
-            <Link href="/quizcoloresdos" className="absolute bottom-[44%] right-[53%] hover:scale-110 transition-transform">
-              <Image src="/flor.png" alt="Actividad 3" width={50} height={50} />
+            <Link href="/quizcoloresdos" className="absolute bottom-[10%] top-[75%] right-[0%] hover:scale-110 transition-transform">
+              <div className="p-4  rounded-full drop-shadow-lg hover:animate-pulse hover:brightness-125">
+                <Image
+                  src="/flor.png"
+                  alt="Actividad 1"
+                  width={70}
+                  height={70}
+                  className="object-contain"
+                />
+              </div>
+            </Link>
+            <Link href="/juego3" className="absolute bottom-[10%] top-[32%] right-[62%] hover:scale-110 transition-transform">
+              <div
+              className="p-4 rounded-full drop-shadow-lg hover:animate-pulse hover:brightness-125"
+              style={{ transform: "rotate(-60deg)" }} // Rotar la imagen en diagonal
+              >
+              <Image
+                src="/pala.png"
+                alt="juego 3"
+                width={70}
+                height={70}
+                className="object-contain"
+                style={{ transform: "rotate(360deg)" }} // Revertir la rotación del contenedor
+              />
+              </div>
             </Link>
           </div>
         </div>

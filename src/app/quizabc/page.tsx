@@ -57,7 +57,7 @@ export default function Quiz() {
     await fetch("/api/progreso", {
       method: "POST",
       body: JSON.stringify({ 
-        leccion: "quiz1",
+        leccion: "Quiz 1",
         categoria: "abecedario"
       }),
       headers: { "Content-Type": "application/json" },

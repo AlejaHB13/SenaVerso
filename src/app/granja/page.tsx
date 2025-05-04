@@ -26,18 +26,18 @@ export default function Home() {
                 ×
               </button>
 
-                <div className="relative w-[90%] max-w-lg mx-auto">
+                <div className="relative w-[100%] max-w-lg mx-auto">
                 {/* Imagen de fondo */}
                 <img
-                  src="/instrucciones.png" // Asegúrate de que la URL sea correcta
-                  alt="Pergamino"
-                  className="w-full h-auto rounded-lg"
+                  src="/hojas.png" // Asegúrate de que la URL sea correcta
+                  alt="hoja"
+                  className="w-full h-auto rounded-lg scale-450"
                 />
 
                 {/* Contenedor de texto centrado */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] p-4 bg-white bg-opacity-0 text-center">
-                  <p className="text-black text-lg font-bold leading-tight">
-                 Haz clic en los íconos de las monedas para realizar cada actividad y en volcan podras encontrar otra aventura.
+                  <p className="text-black text-sm font-bold leading-tight">
+                 Haz clic en los animales para realizar cada actividad y en el tractor podras encontrar otra aventura.
                   </p>
                 </div>
               </div>
@@ -81,7 +81,7 @@ export default function Home() {
             >
               ?
             </button>
-            <Link href="/" className="absolute top-[30%] left-[50%] hover:scale-110 transition-transform">
+            <Link href="/animalesquiz" className="absolute top-[30%] left-[50%] hover:scale-110 transition-transform">
               <div className="p-4  rounded-full drop-shadow-lg hover:animate-pulse hover:brightness-125">
                 <Image
                   src="/vaca.png"
@@ -103,13 +103,24 @@ export default function Home() {
                 />
               </div>
             </Link>
-            <Link href="/" className="absolute bottom-[10%] right-[6%] hover:scale-110 transition-transform">
+            <Link href="/animalesquizdos" className="absolute bottom-[10%] right-[6%] hover:scale-110 transition-transform">
               <div className="p-4  rounded-full drop-shadow-lg hover:animate-pulse hover:brightness-125">
                 <Image
                   src="/cerdito.png"
                   alt="Actividad 3"
                   width={70}
                   height={70}
+                  className="object-contain"
+                />
+              </div>
+            </Link>
+            <Link href="/juego2" className="absolute bottom-[10%] top-[65%] left-[25%] hover:scale-110 transition-transform">
+              <div className="p-4  rounded-full drop-shadow-lg hover:animate-pulse hover:brightness-125">
+                <Image
+                  src="/tractor.png"
+                  alt="juego 2"
+                  width={100}
+                  height={100}
                   className="object-contain"
                 />
               </div>

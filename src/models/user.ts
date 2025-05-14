@@ -17,7 +17,7 @@ const userSchema = new Schema({
   email: {
     type: String,
     unique: true,
-    required: [true, "Email is required"],
+    required: [true, "Debes ingresar un correo electrónico"],
     match: [
       /^\w+([\·-]?\w+)*@\w+([\·-]?\w+)*(\.\w{2,3})+$/,
       "Email is not valid",
@@ -25,14 +25,14 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, "Password is required"],
+    required: [true, "Debes ingresar una contraseña"],
     select: false,
   },
   fullname: {
     type: String,
-    required: [true, "Fullname is required"],
-    minLength: [3, "Fullname must be at least 3 characters"],
-    maxLength: [50, "Fullname must be at most 50 characters"],
+    required: [true, "Debes ingresar tu nombre"],
+    minLength: [3, "El nombre debe tener minimo 3 caracteres"],
+    maxLength: [50, "El nombre debe tener maximo 50 caracteres"],
   },
   progreso: [progresoSchema] // Nuevo campo para guardar el progreso del usuario
 });

@@ -12,12 +12,11 @@ type Question = {
 };
 
 const allQuizData: Question[] = [
-  { video: "/videos/w.mp4", options: ["/images/w.png", "/images/m.png", "/images/a.png"], answer: "/images/w.png" },
-  { video: "/videos/c.mp4", options: ["/images/c.png", "/images/z.png", "/images/o.png"], answer: "/images/c.png" },
-  { video: "/videos/m.mp4", options: ["/images/a.png", "/images/m.png", "/images/n.png"], answer: "/images/m.png" },
-  { video: "/videos/p.mp4", options: ["/images/p.png", "/images/q.png", "/images/r.png"], answer: "/images/p.png" },
-  { video: "/videos/t.mp4", options: ["/images/t.png", "/images/u.png", "/images/v.png"], answer: "/images/t.png" },
-  { video: "/videos/g.mp4", options: ["/images/g.png", "/images/h.png", "/images/j.png"], answer: "/images/g.png" },
+  { video: "/rojo.mp4", options: ["/rojo.png", "/negro.png", "/amarillo.png"], answer: "/rojo.png" },
+  { video: "/gris.mp4", options: ["/morado.png", "/gris.png", "/azul.png"], answer: "/gris.png" },
+  { video: "/naranja.mp4", options: ["/cafe.png", "/verde.png", "/naranja.png"], answer: "/naranja.png" },
+  { video: "/negro.mp4", options: ["/blanco.png", "/rojo.png", "/negro.png"], answer: "/negro.png" },
+  { video: "/verde.mp4", options: ["/rojo.png", "/verde.png", "/blanco.png"], answer: "/verde.png" }
 ];
 
 export default function Quiz() {
@@ -55,7 +54,7 @@ export default function Quiz() {
     await fetch("/api/progreso", {
       method: "POST",
       body: JSON.stringify({ 
-        leccion: "Quiz 2",
+        leccion: "Quiz 3.2",
         categoria: "colores"
       }),
       headers: { "Content-Type": "application/json" },
@@ -68,7 +67,7 @@ export default function Quiz() {
   const cerrarModalYRedirigir = () => {
     setMostrarModal(false);
     setTimeout(() => {
-      window.location.href = "/juego1"; // Redirige a la isla
+      window.location.href = "/jardin"; // Redirige a la isla
     }, 500);
   };
 
@@ -159,13 +158,9 @@ export default function Quiz() {
       {mostrarModal && (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-100 text-center">
-        <h2 className="text-xl font-bold text-green-600">¡Lo lograste!</h2>
-        <p className="mt-2 text-gray-700">Encontraste el tesoro con Mani</p>
-        <img 
-        src="/tesoro.png" 
-        alt="Llave encontrada" 
-        className="mx-auto my-4 w-80 h-80"
-      />
+      <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
+              <p className="mt-2 text-gray-700">Lograste recolectar todas las flores</p>
+              <img src="/flor.png" alt="Llave encontrada" className="mx-auto my-4 w-100 h-80" />
         <button
           onClick={cerrarModalYRedirigir}
           className="mt-4 bg-[#69FF37] text-black px-4 py-2 rounded-lg hover:bg-green-500 transition-all"

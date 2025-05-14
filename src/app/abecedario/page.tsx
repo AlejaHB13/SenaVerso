@@ -59,7 +59,7 @@ export default function VerAbecedario() {
     await fetch("/api/progreso", {
       method: "POST",
       body: JSON.stringify({ 
-        leccion: "Teoria",
+        leccion: "Teoria 1",
         categoria: "abecedario", // Incluye la categoría aquí // Incluye la categoría aquí
         completado: true // ¡clave!
       }),

@@ -101,7 +101,7 @@ function ProfilePage() {
                 <h2 className="text-xl font-semibold text-[#69FF37] mb-3">Tu Progreso</h2>
                 {progreso.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {["abecedario", "colores", "animales"].map((categoria) => (
+                    {["abecedario", "animales", "colores"].map((categoria) => (
                       <div key={categoria} className="bg-gray-50 p-4 rounded-lg shadow">
                         <h3 className="text-lg font-medium text-[#69FF37] mb-2 capitalize">
                           {categoria}
@@ -153,30 +153,35 @@ function ProfilePage() {
                   Tus Insignias
                 </h2>
                 {progreso.length > 0 ? (
-                  progreso
-                    .filter((p) => p.leccion.includes("juego")) // Filtrar lecciones que contienen "juego"
-                    .map((p, index) => (
-                      <div key={index} className="flex items-center space-x-4 mb-4">
-                        {lessonBadges[p.leccion] ? (
-                          <>
-                            <Image
-                              src={lessonBadges[p.leccion].image}
-                              alt={`Insignia ${p.leccion}`}
-                              width={100}
-                              height={100}
-                              className="object-contain"
-                            />
+                  <div className="flex justify-center items-center flex-wrap gap-6">
+                    {progreso
+                      .filter((p) => p.leccion.includes("juego")) // Filtrar lecciones que contienen "juego"
+                      .map((p, index) => (
+                        <div
+                          key={index}
+                          className="flex flex-col items-center space-y-2"
+                        >
+                          {lessonBadges[p.leccion] ? (
+                            <>
+                              <Image
+                                src={lessonBadges[p.leccion].image}
+                                alt={`Insignia ${p.leccion}`}
+                                width={100}
+                                height={100}
+                                className="object-contain"
+                              />
+                              <span className="text-sm font-medium text-gray-700">
+                                {lessonBadges[p.leccion].text}
+                              </span>
+                            </>
+                          ) : (
                             <span className="text-sm font-medium text-gray-700">
-                              {lessonBadges[p.leccion].text}
+                              Insignia no disponible para {p.leccion}
                             </span>
-                          </>
-                        ) : (
-                          <span className="text-sm font-medium text-gray-700">
-                            Insignia no disponible para {p.leccion}
-                          </span>
-                        )}
-                      </div>
-                    ))
+                          )}
+                        </div>
+                      ))}
+                  </div>
                 ) : (
                   <p className="text-gray-600">
                     Aún no tienes insignias registradas.

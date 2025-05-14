@@ -20,19 +20,18 @@ interface GameState {
 }
 
 const letters: Card[] = [
-  { id: "A", type: "letter", content: "/a-image.png" }, // Imagen para la letra A
-  { id: "B", type: "letter", content: "/b-image.png" }, // Imagen para la letra B
-  { id: "C", type: "letter", content: "/c-image.png" }, // Imagen para la letra C
-  { id: "C-sign", type: "sign", content: "/c-video.mp4", pair: "C" }, // Video para la seña C
-  { id: "A-sign", type: "sign", content: "/a-video.mp4", pair: "A" }, // Video para la seña A
-  { id: "B-sign", type: "sign", content: "/b-video.mp4", pair: "B" }, // Video para la seña B
+  { id: "A", type: "letter", content: "/caballito.png" },
+  { id: "B", type: "letter", content: "/vaquita.png" },
+  { id: "C", type: "letter", content: "/gato.png" },
+  { id: "C-sign", type: "sign", content: "/gato.mp4", pair: "C" },
+  { id: "A-sign", type: "sign", content: "/caballo.mp4", pair: "A" },
+  { id: "B-sign", type: "sign", content: "/vaca.mp4", pair: "B" },
 ];
 
-// Mapa de mensajes personalizados
 const pairMessages: Record<string, { message: string; image: string }> = {
-  A: { message: "¡Lograste llegar al cultivo!", image: "/.png" },
-  B: { message: "¡Lograste sembrar las semillas!", image: "/.png" },
-  C: { message: "¡Lograste tener todo el cultivo!", image: "/.png" },
+  A: { message: "¡Lograste llegar al cultivo!", image: "/cultivo.png" },
+  B: { message: "¡Lograste sembrar las semillas!", image: "/semillas.png" },
+  C: { message: "¡Lograste tener todo el cultivo!", image: "/cosecha.png" },
 };
 
 const useGameStore = create<GameState>((set) => ({
@@ -51,8 +50,8 @@ const menuItems = [
 export default function MemoryGame() {
   const [flipped, setFlipped] = useState<Card[]>([]);
   const [disabled, setDisabled] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
-  const [currentPairMessage, setCurrentPairMessage] = useState<{ message: string; image: string } | null>(null); // Estado para el mensaje actual
+  const [currentPairMessage, setCurrentPairMessage] = useState<{ message: string; image: string } | null>(null);
+  const [gameCompleted, setGameCompleted] = useState(false);
   const matchedPairs = useGameStore((state) => state.matchedPairs);
   const addMatch = useGameStore((state) => state.addMatch);
   const resetGame = useGameStore((state) => state.resetGame);
@@ -64,12 +63,12 @@ export default function MemoryGame() {
       const [first, second] = flipped;
 
       if (
-        (first.type === "letter" && second.pair === first.content) ||
-        (second.type === "letter" && first.pair === second.content)
+        (first.type === "letter" && second.pair === first.id) ||
+        (second.type === "letter" && first.pair === second.id)
       ) {
-        addMatch(first.content);
-        setCurrentPairMessage(pairMessages[first.content]); // Establece el mensaje correspondiente
-        setTimeout(() => setCurrentPairMessage(null), 1500); // Oculta el mensaje después de 1.5 segundos
+        addMatch(first.id);
+        setCurrentPairMessage(pairMessages[first.id]);
+        setTimeout(() => setCurrentPairMessage(null), 1500);
       }
 
       setTimeout(() => {
@@ -81,20 +80,24 @@ export default function MemoryGame() {
 
   useEffect(() => {
     if (matchedPairs.length === letters.filter((c) => c.type === "letter").length) {
-      fetch("/api/progreso", {
-        method: "POST",
-        body: JSON.stringify({ leccion: "juego2", categoria: "animales" }),
-        headers: { "Content-Type": "application/json" },
-      });
-      setShowMessage(true);
+      setGameCompleted(true);
+      setTimeout(() => {
+        fetch("/api/progreso", {
+          method: "POST",
+          body: JSON.stringify({ leccion: "juego2", categoria: "animales" }),
+          headers: { "Content-Type": "application/json" },
+        }).then(() => {
+          router.push("/lecciones");
+        });
+      }, 2000);
     }
-  }, [matchedPairs]);
+  }, [matchedPairs, router]);
 
   const handleFlip = (card: Card) => {
     if (
       flipped.length < 2 &&
       !flipped.some((c) => c.id === card.id) &&
-      !matchedPairs.includes(card.pair ?? card.content) &&
+      !matchedPairs.includes(card.pair ?? card.id) &&
       !disabled
     ) {
       setFlipped((prev) => [...prev, card]);
@@ -102,9 +105,8 @@ export default function MemoryGame() {
   };
 
   const handleCloseMessage = () => {
-    setShowMessage(false);
     resetGame();
-    router.push("/lecciones");
+    router.push("/granja");
   };
 
   return (
@@ -136,7 +138,6 @@ export default function MemoryGame() {
       </aside>
 
       <div className="flex flex-1 justify-between p-20">
-        {/* Left Section: Text and Game */}
         <div className="flex flex-col items-center w-2/3">
           <h1 className="text-black font-bold">Ayuda a Mani cultivar en la granja</h1>
           <h3 className="text-black font-bold">Debes realizar las parejas respectivas con cada seña y animal</h3>
@@ -147,7 +148,7 @@ export default function MemoryGame() {
                 card={card}
                 flipped={
                   flipped.includes(card) ||
-                  matchedPairs.includes(card.pair ?? card.content)
+                  matchedPairs.includes(card.pair ?? card.id)
                 }
                 onFlip={() => handleFlip(card)}
               />
@@ -155,7 +156,6 @@ export default function MemoryGame() {
           </div>
         </div>
 
-        {/* Right Section: Large Image */}
         <div className="flex items-center justify-center w-1/3">
           <Image
             src="/mano3.png"
@@ -167,25 +167,19 @@ export default function MemoryGame() {
         </div>
       </div>
 
-      {showMessage && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <h2 className="text-2xl font-bold text-black">¡Felicidades!</h2>
-            <p className="text-black">Logramos recolectar toda el cultivo.</p>
-            <button
-              className="mt-4 px-4 py-2 bg-[#facc17] text-white rounded"
-              onClick={handleCloseMessage}
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
       {currentPairMessage && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-lg shadow-lg text-center flex flex-col items-center">
             <Image src={currentPairMessage.image} alt="¡Acierto!" width={100} height={100} className="mb-4" />
             <h2 className="text-xl font-bold text-black">{currentPairMessage.message}</h2>
+          </div>
+        </div>
+      )}
+
+      {gameCompleted && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-2xl font-bold text-black">¡Felicidades! Completaste el juego.</h2>
           </div>
         </div>
       )}
@@ -200,22 +194,22 @@ interface MemoryCardProps {
 }
 
 function MemoryCard({ card, flipped, onFlip }: MemoryCardProps) {
-  const isSelected = flipped; // Determina si la tarjeta está seleccionada
+  const isSelected = flipped;
 
   return (
     <div className="flex">
       <div
-        className={`w-24 h-24 border-2 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e] transition-all ${
+        className={`w-48 h-48 border-4 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e] transition-all ${
           isSelected ? "border-[#69FF37] shadow-lg" : "border-gray-300"
-        }`}
+        } ${flipped ? "border-[#69FF37]" : ""}`}
         onClick={onFlip}
       >
         {card.type === "letter" ? (
-          <img src={card.content} alt="Imagen" className="w-16 h-16 object-contain" />
+          <img src={card.content} alt="Imagen" className="w-32 h-32 object-contain" />
         ) : (
           <video
             src={card.content}
-            className="w-16 h-16 object-contain"
+            className="w-32 h-32 object-contain"
             autoPlay
             loop
             muted

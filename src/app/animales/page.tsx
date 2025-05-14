@@ -6,18 +6,18 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 const videos = [
-  { src: "caballito.png", text: ".mp4" },
-  { src: "/cerdo.png", text: "/cerdo.png" },
-  { src: "/burro.png", text: "/burro.png" },
-  { src: "/conejo.png", text: "/conejo.png" },
+  { src: "caballito.png", text: "caballo.mp4" },
+  { src: "/cerdo.png", text: "/cerdo.mp4" },
+  { src: "/burro.png", text: "/burro.mp4" },
+  { src: "/conejo.png", text: "/conejo.mp4" },
   { src: "/gallina.png", text: "/gallina.png" },
-  { src: "/gallo.png", text: "/gallo.png" },
-  { src: "/gato.png", text: "/gato.png" },
+  { src: "/gallo.png", text: "/gallo.mp4" },
+  { src: "/gato.png", text: "/gato.mp4" },
   { src: "/mariposa.png", text: "/mariposa.png" },
   { src: "/oveja.png", text: "/oveja.png" },
   { src: "/pajaro.png", text: "/pajaro.png" },
   { src: "/perro.png", text: "/perro.png" },
-  { src: "/vaquita.png", text: "/vaquita.png" },
+  { src: "/vaquita.png", text: "/vaca.mp4" },
 ];
 
 export default function VerAbecedario() {
@@ -47,7 +47,7 @@ export default function VerAbecedario() {
     await fetch("/api/progreso", {
       method: "POST",
       body: JSON.stringify({ 
-        leccion: "Teoria",
+        leccion: "Teoria 2",
         categoria: "animales"
       }),
       headers: { "Content-Type": "application/json" },
@@ -59,7 +59,7 @@ export default function VerAbecedario() {
   const cerrarModalYRedirigir = () => {
     setMostrarModal(false);
     setTimeout(() => {
-      window.location.href = "/isla";
+      window.location.href = "/granja";
     }, 500);
   };
 
@@ -179,9 +179,9 @@ export default function VerAbecedario() {
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-100 text-center">
               <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
-              <p className="mt-2 text-gray-700">Recogiste la primera flor.</p>
+              <p className="mt-2 text-gray-700">Entraste al establo.</p>
               <img src="/" alt="Llave encontrada" className="mx-auto my-4 w-100 h-80" />
-              <p className="mt-2 text-gray-700">Ahora debemos recoger más</p>
+              <p className="mt-2 text-gray-700">Descubre el resto de la granja</p>
               <button
                 onClick={cerrarModalYRedirigir}
                 className="mt-4 bg-[#69FF37] text-black px-4 py-2 rounded-lg hover:bg-green-500 transition-all"

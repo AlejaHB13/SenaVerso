@@ -12,12 +12,12 @@ type Question = {
 };
 
 const allQuizData: Question[] = [
-  { video: "/videos/w.mp4", options: ["/images/w.png", "/images/m.png", "/images/a.png"], answer: "/images/w.png" },
-  { video: "/videos/c.mp4", options: ["/images/c.png", "/images/z.png", "/images/o.png"], answer: "/images/c.png" },
-  { video: "/videos/m.mp4", options: ["/images/a.png", "/images/m.png", "/images/n.png"], answer: "/images/m.png" },
-  { video: "/videos/p.mp4", options: ["/images/p.png", "/images/q.png", "/images/r.png"], answer: "/images/p.png" },
-  { video: "/videos/t.mp4", options: ["/images/t.png", "/images/u.png", "/images/v.png"], answer: "/images/t.png" },
-  { video: "/videos/g.mp4", options: ["/images/g.png", "/images/h.png", "/images/j.png"], answer: "/images/g.png" },
+  { video: "/caballo.mp4", options: ["/burro.png", "caballito.png", "/oveja.png"], answer: "/caballo.png" },
+  { video: "/conejo.mp4", options: ["/conejo.png", "/gato.png", "/gallina.png"], answer: "/conejo.png" },
+  { video: "/mariposa.mp4", options: ["/perro.png", "/cerdo.png", "/mariposa.png"], answer: "/mariposa.png" },
+  { video: "/oveja.mp4", options: ["/gallo.png", "/oveja.png", "/conejo.png"], answer: "/oveja.png" },
+  { video: "/pajaro.mp4", options: ["/pajaro.png", "/gallina.png", "/gato.png"], answer: "/pajaro.png" },
+  { video: "/perro.mp4", options: ["/oveja.png", "/vaquita.png", "/perro.png"], answer: "/perro.png" },
 ];
 
 export default function Quiz() {
@@ -55,7 +55,7 @@ export default function Quiz() {
     await fetch("/api/progreso", {
       method: "POST",
       body: JSON.stringify({ 
-        leccion: "Quiz 2",
+        leccion: "Quiz 2.2",
         categoria: "colores"
       }),
       headers: { "Content-Type": "application/json" },
@@ -68,7 +68,7 @@ export default function Quiz() {
   const cerrarModalYRedirigir = () => {
     setMostrarModal(false);
     setTimeout(() => {
-      window.location.href = "/juego1"; // Redirige a la isla
+      window.location.href = "/granja"; // Redirige a la isla
     }, 500);
   };
 
@@ -82,7 +82,7 @@ export default function Quiz() {
   return (
      <div className="flex">
       <button
-                    onClick={() => router.push("/jardin")}
+                    onClick={() => router.push("/granja")}
                     className="absolute top-4 right-4  text-black px-2 py-2 rounded-lg  transition-all"
                   >
                    <Image
@@ -121,8 +121,8 @@ export default function Quiz() {
                                    </nav>
                                  </aside>
     <div className="flex flex-col items-center justify-center min-h-screen w-full p-8 text-black bg-white">
-      <div className="bg-[#17a7e8] text-black font-semibold text-center rounded-lg p-4 shadow-lg text-2xl mb-6">
-        Resuelve estas preguntas para encontrar lmas flores 
+      <div className="bg-[#a2845e] text-black font-semibold text-center rounded-lg p-4 shadow-lg text-2xl mb-6">
+        Resuelve estas preguntas para ver más animales 
       </div>
       {!completed && shuffledQuiz.length > 0 && (
         <div className="bg-white p-6 rounded-lg shadow-lg text-center w-80">
@@ -144,13 +144,13 @@ export default function Quiz() {
                 }`}
                 whileHover={{ scale: 1.1 }}
               >
-                <img src={option} alt="Option" className="w-full h-20 object-contain" />
+                <img src={option} alt="Option" className="w-full h-full object-contain" /> {/* Cambiado de h-20 a h-32 */}
               </motion.button>
             ))}
           </div>
           <button
             onClick={handleNext}
-            className="mt-4 px-4 py-2 bg-[#17a7e8] text-white rounded-lg shadow-md"
+            className="mt-4 px-4 py-2 bg-[#a2845e] text-white rounded-lg shadow-md"
           >
             Siguiente
           </button>
@@ -160,7 +160,7 @@ export default function Quiz() {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-100 text-center">
         <h2 className="text-xl font-bold text-green-600">¡Lo lograste!</h2>
-        <p className="mt-2 text-gray-700">Encontraste el tesoro con Mani</p>
+        <p className="mt-2 text-gray-700">Encontraste todos los animales de la granja de Mani</p>
         <img 
         src="/tesoro.png" 
         alt="Llave encontrada" 

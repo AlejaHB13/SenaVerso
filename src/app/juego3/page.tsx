@@ -20,12 +20,12 @@ interface GameState {
 }
 
 const letters: Card[] = [
-  { id: "A", type: "letter", content: "/a-image.png" }, // Imagen para la letra A
-  { id: "B", type: "letter", content: "/b-image.png" }, // Imagen para la letra B
-  { id: "C", type: "letter", content: "/c-image.png" }, // Imagen para la letra C
-  { id: "C-sign", type: "sign", content: "/c-video.mp4", pair: "C" }, // Video para la seña C
-  { id: "A-sign", type: "sign", content: "/a-video.mp4", pair: "A" }, // Video para la seña A
-  { id: "B-sign", type: "sign", content: "/b-video.mp4", pair: "B" }, // Video para la seña B
+  { id: "A", type: "letter", content: "/morado.png" }, // Imagen para la letra A
+  { id: "B", type: "letter", content: "/naranja.png" }, // Imagen para la letra B
+  { id: "C", type: "letter", content: "/negro.png" }, // Imagen para la letra C
+  { id: "C-sign", type: "sign", content: "/negro.mp4", pair: "C" }, // Video para la seña C
+  { id: "A-sign", type: "sign", content: "/morado.mp4", pair: "A" }, // Video para la seña A
+  { id: "B-sign", type: "sign", content: "/naranja.mp4", pair: "B" }, // Video para la seña B
 ];
 
 
@@ -80,7 +80,7 @@ export default function MemoryGame() {
     if (matchedPairs.length === letters.filter((c) => c.type === "letter").length) {
       fetch("/api/progreso", {
         method: "POST",
-        body: JSON.stringify({ leccion: "juego2", categoria: "animales" }),
+        body: JSON.stringify({ leccion: "juego3", categoria: "colores" }),
         headers: { "Content-Type": "application/json" },
       });
       setShowMessage(true);
@@ -136,7 +136,7 @@ export default function MemoryGame() {
         {/* Left Section: Text and Game */}
         <div className="flex flex-col items-center w-2/3">
           <h1 className="text-black font-bold">Ayuda a Mani cultivar en la granja</h1>
-          <h3 className="text-black font-bold">Debes realizar las parejas respectivas con cada seña y animal</h3>
+          <h3 className="text-black font-bold">Debes realizar las parejas respectivas con cada seña y color</h3>
           <div className="grid grid-cols-3 gap-6 mt-8">
             {letters.map((card) => (
               <MemoryCard
@@ -168,7 +168,7 @@ export default function MemoryGame() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <h2 className="text-2xl font-bold text-black">¡Felicidades!</h2>
-            <p className="text-black">Logramos recolectar toda el cultivo.</p>
+            <p className="text-black">Logramos plantar todas las flores.</p>
             <button
               className="mt-4 px-4 py-2 bg-[#facc17] text-white rounded"
               onClick={handleCloseMessage}

@@ -12,11 +12,10 @@ type Question = {
 };
 
 const allQuizData: Question[] = [
-  { image: "amarillo.png", options: ["video1.mp4", "video2.mp4", "video3.mp4"], answer: "video1.mp4" },
-  { image: "azul.png", options: ["video4.mp4", "video5.mp4", "video6.mp4"], answer: "video4.mp4" },
-  { image: "blanco.png", options: ["video7.mp4", "video8.mp4", "video9.mp4"], answer: "video7.mp4" },
-  { image: "cafe.png", options: ["video10.mp4", "video11.mp4", "video12.mp4"], answer: "video10.mp4" },
-  { image: "morado.png", options: ["video13.mp4", "video14.mp4", "video15.mp4"], answer: "video13.mp4" },
+  { image: "gallo.png", options: ["gallo.mp4", "gallina.mp4", "pajaro.mp4"], answer: "gallo.mp4" },
+  { image: "gallina.png", options: ["gallo.mp4", "pajaro.mp4", "gallina.mp4"], answer: "gallina.mp4" },
+  { image: "vaquita.png", options: ["gato.mp4", "vaca.mp4", "burro.mp4"], answer: "vaca.mp4" },
+  { image: "cerdo.png", options: ["cerdo.mp4", "vaca.mp4", "gato.mp4"], answer: "cerdo.mp4" },
 
 ];
 
@@ -56,8 +55,8 @@ export default function Quiz() {
     await fetch("/api/progreso", {
       method: "POST",
       body: JSON.stringify({ 
-        leccion: "Quiz 1",
-        categoria: "colores"
+        leccion: "Quiz 2.1",
+        categoria: "animales"
       }),
       headers: { "Content-Type": "application/json" },
     });
@@ -68,7 +67,7 @@ export default function Quiz() {
   const cerrarModalYRedirigir = () => {
     setMostrarModal(false);
     setTimeout(() => {
-      window.location.href = "/jardin"; // Redirige a la isla
+      window.location.href = "/granja"; // Redirige a la isla
     }, 500);
   };
 
@@ -82,7 +81,7 @@ export default function Quiz() {
   return (
     <div className="flex">
       <button
-                    onClick={() => router.push("/jardin")}
+                    onClick={() => router.push("/granja")}
                     className="absolute top-4 right-4  text-black px-2 py-2 rounded-lg  transition-all"
                   >
                    <Image
@@ -121,13 +120,13 @@ export default function Quiz() {
         </nav>
       </aside>
       <div className="flex flex-col items-center justify-center min-h-screen w-full p-8 text-black bg-white">
-        <div className="bg-[#17a7e8] text-black font-semibold text-center rounded-lg p-4 shadow-lg text-2xl mb-6">
-          Encontremos más flores
+        <div className="bg-[#a2845e] text-black font-semibold text-center rounded-lg p-4 shadow-lg text-2xl mb-6">
+          Encontremos más animales
         </div>
         {!completed && shuffledQuiz.length > 0 && (
           <div className="bg-white p-6 rounded-lg shadow-lg text-center w-120">
             <h2 className="text-2xl font-bold mb-4">
-              Selecciona el video correcto para el color:
+              Selecciona el video correcto para el animal:
             </h2>
             <div className="flex justify-center items-center mb-4">
               <Image
@@ -160,7 +159,7 @@ export default function Quiz() {
             </div>
             <button
               onClick={handleNext}
-              className="mt-4 px-4 py-2 bg-[#17a7e8] text-white rounded-lg shadow-md hover:bg-blue-600"
+              className="mt-4 px-4 py-2 bg-[#a2845e] text-white rounded-lg shadow-md "
             >
               Siguiente
             </button>
@@ -170,12 +169,9 @@ export default function Quiz() {
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-100 text-center">
               <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
-              <p className="mt-2 text-gray-700"></p>
-              <img 
-                src="/llave.png" 
-                alt="Llave encontrada" 
-                className="mx-auto my-4 w-80 h-80"
-              />
+              <p className="mt-2 text-gray-700">Entraste al lago.</p>
+              <img src="/" alt="Llave encontrada" className="mx-auto my-4 w-100 h-80" />
+              <p className="mt-2 text-gray-700">Descubre el resto de la granja</p>
               <button
                 onClick={cerrarModalYRedirigir}
                 className="mt-4 bg-[#69FF37] text-black px-4 py-2 rounded-lg hover:bg-green-500 transition-all"

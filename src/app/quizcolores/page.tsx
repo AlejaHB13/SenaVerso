@@ -12,11 +12,11 @@ type Question = {
 };
 
 const allQuizData: Question[] = [
-  { image: "amarillo.png", options: ["video1.mp4", "video2.mp4", "video3.mp4"], answer: "video1.mp4" },
-  { image: "azul.png", options: ["video4.mp4", "video5.mp4", "video6.mp4"], answer: "video4.mp4" },
-  { image: "blanco.png", options: ["video7.mp4", "video8.mp4", "video9.mp4"], answer: "video7.mp4" },
-  { image: "cafe.png", options: ["video10.mp4", "video11.mp4", "video12.mp4"], answer: "video10.mp4" },
-  { image: "morado.png", options: ["video13.mp4", "video14.mp4", "video15.mp4"], answer: "video13.mp4" },
+  { image: "amarillo.png", options: ["amarillo.mp4", "azul.mp4", "rojo.mp4"], answer: "amarillo.mp4" },
+  { image: "azul.png", options: ["azul.mp4", "morado.mp4", "gris.mp4"], answer: "azul.mp4" },
+  { image: "blanco.png", options: ["naranja.mp4", "verde.mp4", "blanco.mp4"], answer: "blanco.mp4" },
+  { image: "cafe.png", options: ["negro.mp4", "cafe.mp4", "azul.mp4"], answer: "cafe.mp4" },
+  { image: "morado.png", options: ["morado.mp4", "rojo.mp4", "cafe.mp4"], answer: "morado.mp4" },
 
 ];
 
@@ -56,7 +56,7 @@ export default function Quiz() {
     await fetch("/api/progreso", {
       method: "POST",
       body: JSON.stringify({ 
-        leccion: "Quiz 1",
+        leccion: "Quiz 3.1",
         categoria: "colores"
       }),
       headers: { "Content-Type": "application/json" },
@@ -169,13 +169,10 @@ export default function Quiz() {
         {mostrarModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-100 text-center">
-              <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
-              <p className="mt-2 text-gray-700"></p>
-              <img 
-                src="/llave.png" 
-                alt="Llave encontrada" 
-                className="mx-auto my-4 w-80 h-80"
-              />
+            <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
+              <p className="mt-2 text-gray-700">Recogiste la segunda flor.</p>
+              <img src="/flor.png" alt="Llave encontrada" className="mx-auto my-4 w-100 h-80" />
+              <p className="mt-2 text-gray-700">Ahora debemos recoger más</p>
               <button
                 onClick={cerrarModalYRedirigir}
                 className="mt-4 bg-[#69FF37] text-black px-4 py-2 rounded-lg hover:bg-green-500 transition-all"

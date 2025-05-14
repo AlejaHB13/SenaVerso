@@ -6,16 +6,16 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 const videos = [
-  { src: "/amarillo.png", text: "/.mp4" },
-  { src: "/azul.png", text: "/azul.png" },
-  { src: "/blanco.png", text: "/blanco.png" },
-  { src: "/cafe.png", text: "/cafe.png" },
-  { src: "/gris.png", text: "/gris.mp4" },
-  { src: "/morado.png", text: "/morado.mp4" },
-  { src: "/naranja.png", text: "/naranja.mp4" },
+  { src: "/amarillo.png", text: "/amarillo.mp4" },
+  { src: "/azul.png", text: "/azul.mp4" },
+  { src: "/blanco.png", text: "/blanco." },
+  { src: "/cafe.png", text: "/cafe." },
+  { src: "/gris.png", text: "/gris." },
+  { src: "/morado.png", text: "/morado." },
+  { src: "/naranja.png", text: "/naranja." },
   { src: "/rojo.png", text: "/rojo.mp4" },
-  { src: "/negro.png", text: "/negro.mp4" },
-  { src: "/verde.png", text: "/verde.mp4" },
+  { src: "/negro.png", text: "/negro." },
+  { src: "/verde.png", text: "/verde." },
 ];
 
 export default function VerAbecedario() {
@@ -45,7 +45,7 @@ export default function VerAbecedario() {
     await fetch("/api/progreso", {
       method: "POST",
       body: JSON.stringify({ 
-        leccion: "Teoria",
+        leccion: "Teoria 3",
         categoria: "colores"
       }),
       headers: { "Content-Type": "application/json" },
@@ -57,7 +57,7 @@ export default function VerAbecedario() {
   const cerrarModalYRedirigir = () => {
     setMostrarModal(false);
     setTimeout(() => {
-      window.location.href = "/isla";
+      window.location.href = "/jardin";
     }, 500);
   };
 
@@ -154,7 +154,7 @@ export default function VerAbecedario() {
 
           <button
             onClick={siguienteVideo}
-            className="bg-[#17a7e8] text-black px-6 py-3 rounded-lg shadow-md hover:bg-yellow-500 transition-all"
+            className="bg-[#17a7e8] text-black px-6 py-3 rounded-lg shadow-md transition-all"
           >
             Siguiente
           </button>
@@ -178,7 +178,7 @@ export default function VerAbecedario() {
             <div className="bg-white p-6 rounded-lg shadow-lg w-100 text-center">
               <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
               <p className="mt-2 text-gray-700">Recogiste la primera flor.</p>
-              <img src="/" alt="Llave encontrada" className="mx-auto my-4 w-100 h-80" />
+              <img src="/flor.png" alt="Llave encontrada" className="mx-auto my-4 w-100 h-80" />
               <p className="mt-2 text-gray-700">Ahora debemos recoger más</p>
               <button
                 onClick={cerrarModalYRedirigir}

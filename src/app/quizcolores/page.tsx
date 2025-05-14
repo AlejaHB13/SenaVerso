@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 type Question = {
-  image: string; // Cambiado de 'letter' a 'image'
-  options: string[]; // Rutas de videos
-  answer: string; // Ruta del video correcto
+  image: string;
+  options: string[];
+  answer: string;
 };
 
 const allQuizData: Question[] = [
@@ -17,7 +17,6 @@ const allQuizData: Question[] = [
   { image: "blanco.png", options: ["naranja.mp4", "verde.mp4", "blanco.mp4"], answer: "blanco.mp4" },
   { image: "cafe.png", options: ["negro.mp4", "cafe.mp4", "azul.mp4"], answer: "cafe.mp4" },
   { image: "morado.png", options: ["morado.mp4", "rojo.mp4", "cafe.mp4"], answer: "morado.mp4" },
-
 ];
 
 export default function Quiz() {
@@ -27,9 +26,9 @@ export default function Quiz() {
   const [completed, setCompleted] = useState<boolean>(false);
   const [mostrarModal, setMostrarModal] = useState<boolean>(false);
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Seleccionar aleatoriamente 3 preguntas de la lista completa
     const shuffled = [...allQuizData].sort(() => Math.random() - 0.5).slice(0, 3);
     setShuffledQuiz(shuffled);
   }, []);
@@ -40,24 +39,22 @@ export default function Quiz() {
 
   const handleNext = () => {
     if (selectedAnswers[currentQuestion] === shuffledQuiz[currentQuestion].answer) {
-      alert("¡Respuesta correcta!"); // Mostrar mensaje de respuesta correcta
-
       if (currentQuestion + 1 < shuffledQuiz.length) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
         completarRegistro();
       }
     } else {
-      alert("Respuesta incorrecta. Intenta de nuevo."); // Mostrar mensaje de respuesta incorrecta
+      alert("Respuesta incorrecta. Intenta de nuevo.");
     }
   };
 
   const completarRegistro = async () => {
     await fetch("/api/progreso", {
       method: "POST",
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         leccion: "Quiz 3.1",
-        categoria: "colores"
+        categoria: "colores",
       }),
       headers: { "Content-Type": "application/json" },
     });
@@ -68,7 +65,7 @@ export default function Quiz() {
   const cerrarModalYRedirigir = () => {
     setMostrarModal(false);
     setTimeout(() => {
-      window.location.href = "/jardin"; // Redirige a la isla
+      router.push("/jardin");
     }, 500);
   };
 
@@ -80,20 +77,21 @@ export default function Quiz() {
   ];
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
+ {/* Botón de menú móvil */}
       <button
-                    onClick={() => router.push("/jardin")}
-                    className="absolute top-4 right-4  text-black px-2 py-2 rounded-lg  transition-all"
-                  >
-                   <Image
-                src="/flecha.png" // Cambia esta ruta a la imagen que deseas usar
-                alt="Volver"
-                width={70}
-                height={70}
-                className="object-contain"
-              />
-                  </button>
-      <aside className="w-48 h-screen bg-white border-r flex flex-col items-center py-10">
+        className="md:hidden p-4 bg-[#69FF37] text-white font-bold"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        {menuOpen ? "Cerrar Menú" : "Abrir Menú"}
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={`${
+          menuOpen ? "block" : "hidden"
+        } md:block absolute md:relative z-50 w-48 h-screen bg-white border-r flex flex-col items-center py-10`}
+      >
         <Image
           src="/logo.png"
           alt="Logo El Mundo de las Señas"
@@ -120,12 +118,27 @@ export default function Quiz() {
           ))}
         </nav>
       </aside>
+
+      {/* Contenido principal */}
       <div className="flex flex-col items-center justify-center min-h-screen w-full p-8 text-black bg-white">
+             {/* Botón de volver */}
+             <button
+                             onClick={() => router.push("/jardin")}
+                             className="self-start mb-4 bg-gray-200 text-black px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all"
+                           >
+                             <Image
+                               src="/flecha.png"
+                               alt="Volver"
+                               width={30}
+                               height={30}
+                               className="object-contain"
+                             />
+                           </button>
         <div className="bg-[#17a7e8] text-black font-semibold text-center rounded-lg p-4 shadow-lg text-2xl mb-6">
           Encontremos más flores
         </div>
         {!completed && shuffledQuiz.length > 0 && (
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center w-120">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center w-full max-w-2xl">
             <h2 className="text-2xl font-bold mb-4">
               Selecciona el video correcto para el color:
             </h2>
@@ -138,7 +151,7 @@ export default function Quiz() {
                 className="mb-4"
               />
             </div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {shuffledQuiz[currentQuestion].options.map((option) => (
                 <motion.button
                   key={option}
@@ -166,12 +179,18 @@ export default function Quiz() {
             </button>
           </div>
         )}
+
+        {/* Modal */}
         {mostrarModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-100 text-center">
-            <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
+            <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2 text-center">
+              <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
               <p className="mt-2 text-gray-700">Recogiste la segunda flor.</p>
-              <img src="/flor.png" alt="Llave encontrada" className="mx-auto my-4 w-100 h-80" />
+              <img
+                src="/flor.png"
+                alt="Llave encontrada"
+                className="mx-auto my-4 w-40 h-40 sm:w-60 sm:h-60"
+              />
               <p className="mt-2 text-gray-700">Ahora debemos recoger más</p>
               <button
                 onClick={cerrarModalYRedirigir}

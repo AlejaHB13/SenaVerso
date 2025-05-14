@@ -110,20 +110,23 @@ export default function MemoryGame() {
   };
 
   return (
-    <div className="flex">
-      <button
-        onClick={() => router.push("/granja")}
-        className="absolute top-4 right-4 text-black px-2 py-2 rounded-lg transition-all"
-      >
-        <Image
-          src="/flecha.png"
-          alt="Volver"
-          width={70}
-          height={70}
-          className="object-contain"
-        />
-      </button>
-      <aside className="w-48 h-screen bg-white border-r flex flex-col items-center py-10">
+    <div className="flex flex-col md:flex-row">
+           {/* Botón de volver */}
+           <button
+             onClick={() => router.push("/granja")}
+             className="self-start mb-4 bg-gray-200 text-black px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all"
+           >
+             <Image
+               src="/flecha.png"
+               alt="Volver"
+               width={30}
+               height={30}
+               className="object-contain"
+             />
+           </button>
+
+      {/* Sidebar */}
+      <aside className="hidden md:block w-48 h-screen bg-white border-r flex flex-col items-center py-10">
         <Image src="/logo.png" alt="Logo El Mundo de las Señas" width={120} height={120} />
         <h2 className="text-center font-semibold text-[#69FF37]">SeñaVerso</h2>
         <h3 className="text-center text-[#69FF37] text-xs mb-8">Explora el mundo en señas</h3>
@@ -137,11 +140,17 @@ export default function MemoryGame() {
         </nav>
       </aside>
 
-      <div className="flex flex-1 justify-between p-20">
-        <div className="flex flex-col items-center w-2/3">
-          <h1 className="text-black font-bold">Ayuda a Mani cultivar en la granja</h1>
-          <h3 className="text-black font-bold">Debes realizar las parejas respectivas con cada seña y animal</h3>
-          <div className="grid grid-cols-3 gap-6 mt-8">
+      {/* Contenido principal */}
+      <div className="flex flex-col md:flex-row flex-1 p-4 md:p-10">
+        {/* Sección izquierda: Juego */}
+        <div className="flex flex-col items-center w-full md:w-2/3">
+          <h1 className="text-black font-bold text-center">
+            Ayuda a Mani cultivar en la granja
+          </h1>
+          <h3 className="text-black font-bold text-center">
+            Debes realizar las parejas respectivas con cada seña y animal
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
             {letters.map((card) => (
               <MemoryCard
                 key={card.id}
@@ -156,29 +165,32 @@ export default function MemoryGame() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center w-1/3">
+        {/* Sección derecha: Imagen grande */}
+        <div className="flex items-center justify-center w-full md:w-1/3 mt-8 md:mt-0">
           <Image
             src="/mano3.png"
             alt="Imagen grande"
-            width={600}
-            height={600}
+            width={400}
+            height={400}
             className="object-contain"
           />
         </div>
       </div>
 
+      {/* Modal de pareja encontrada */}
       {currentPairMessage && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg text-center flex flex-col items-center">
+          <div className="bg-white p-4 rounded-lg shadow-lg text-center flex flex-col items-center w-11/12 md:w-1/3">
             <Image src={currentPairMessage.image} alt="¡Acierto!" width={100} height={100} className="mb-4" />
             <h2 className="text-xl font-bold text-black">{currentPairMessage.message}</h2>
           </div>
         </div>
       )}
 
+      {/* Modal de éxito */}
       {gameCompleted && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center w-11/12 md:w-1/2">
             <h2 className="text-2xl font-bold text-black">¡Felicidades! Completaste el juego.</h2>
           </div>
         </div>
@@ -197,25 +209,23 @@ function MemoryCard({ card, flipped, onFlip }: MemoryCardProps) {
   const isSelected = flipped;
 
   return (
-    <div className="flex">
-      <div
-        className={`w-48 h-48 border-4 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e] transition-all ${
-          isSelected ? "border-[#69FF37] shadow-lg" : "border-gray-300"
-        } ${flipped ? "border-[#69FF37]" : ""}`}
-        onClick={onFlip}
-      >
-        {card.type === "letter" ? (
-          <img src={card.content} alt="Imagen" className="w-32 h-32 object-contain" />
-        ) : (
-          <video
-            src={card.content}
-            className="w-32 h-32 object-contain"
-            autoPlay
-            loop
-            muted
-          />
-        )}
-      </div>
-    </div>
+    <motion.div
+      className={`w-24 h-24 border-4 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e] transition-all ${
+        isSelected ? "border-[#69FF37] shadow-lg" : "border-gray-300"
+      }`}
+      onClick={onFlip}
+    >
+      {card.type === "letter" ? (
+        <img src={card.content} alt="Imagen" className="w-20 h-20 object-contain" />
+      ) : (
+        <video
+          src={card.content}
+          className="w-20 h-20 object-contain"
+          autoPlay
+          loop
+          muted
+        />
+      )}
+    </motion.div>
   );
 }

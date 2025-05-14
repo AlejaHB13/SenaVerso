@@ -8,27 +8,28 @@ import { motion } from "framer-motion";
 const videos = [
   { src: "/amarillo.png", text: "/amarillo.mp4" },
   { src: "/azul.png", text: "/azul.mp4" },
-  { src: "/blanco.png", text: "/blanco." },
-  { src: "/cafe.png", text: "/cafe." },
-  { src: "/gris.png", text: "/gris." },
-  { src: "/morado.png", text: "/morado." },
-  { src: "/naranja.png", text: "/naranja." },
+  { src: "/blanco.png", text: "/blanco.mp4" },
+  { src: "/cafe.png", text: "/cafe.mp4" },
+  { src: "/gris.png", text: "/gris.mp4" },
+  { src: "/morado.png", text: "/morado.mp4" },
+  { src: "/naranja.png", text: "/naranja.mp4" },
   { src: "/rojo.png", text: "/rojo.mp4" },
-  { src: "/negro.png", text: "/negro." },
-  { src: "/verde.png", text: "/verde." },
+  { src: "/negro.png", text: "/negro.mp4" },
+  { src: "/verde.png", text: "/verde.mp4" },
 ];
 
-export default function VerAbecedario() {
+export default function VerColores() {
   const [completado, setCompletado] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [index, setIndex] = useState(0);
-  const [progreso, setProgreso] = useState(1); // Estado para rastrear el progreso
+  const [progreso, setProgreso] = useState(1);
+  const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
 
   const siguienteVideo = () => {
     if (index < videos.length - 1) {
       setIndex(index + 1);
-      setProgreso(progreso + 1); // Incrementa el progreso
+      setProgreso(progreso + 1);
     } else {
       setCompletado(true);
     }
@@ -37,16 +38,16 @@ export default function VerAbecedario() {
   const anteriorVideo = () => {
     if (index > 0) {
       setIndex(index - 1);
-      setProgreso(progreso - 1); // Decrementa el progreso
+      setProgreso(progreso - 1);
     }
   };
 
   const completarRegistro = async () => {
     await fetch("/api/progreso", {
       method: "POST",
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         leccion: "Teoria 3",
-        categoria: "colores"
+        categoria: "colores",
       }),
       headers: { "Content-Type": "application/json" },
     });
@@ -69,24 +70,22 @@ export default function VerAbecedario() {
   ];
 
   return (
-    <div className="flex relative">
-      {/* Botón Volver en la esquina superior derecha */}
+    <div className="flex flex-col md:flex-row relative">
+      {/* Botón de menú móvil */}
       <button
-        onClick={() => router.push("/jardin")}
-        className="absolute top-4 right-4 text-black px-2 py-2 rounded-lg transition-all"
+        className="md:hidden p-4 bg-[#69FF37] text-white font-bold"
+        onClick={() => setMenuOpen(!menuOpen)}
       >
-        <Image
-          src="/flecha.png"
-          alt="Volver"
-          width={70}
-          height={70}
-          className="object-contain"
-        />
+        {menuOpen ? "Cerrar Menú" : "Abrir Menú"}
       </button>
 
       {/* Sidebar */}
-      <aside className="w-48 h-screen bg-white border-r flex flex-col items-center py-10">
-        <img
+      <aside
+        className={`${
+          menuOpen ? "block" : "hidden"
+        } md:block absolute md:relative z-50 w-48 h-screen bg-white border-r flex flex-col items-center py-10`}
+      >
+        <Image
           src="/logo.png"
           alt="Logo El Mundo de las Señas"
           width={120}
@@ -100,7 +99,13 @@ export default function VerAbecedario() {
               href={item.link}
               className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
             >
-              <img src={item.icon} alt={item.label} width={50} height={50} className="object-contain" />
+              <Image
+                src={item.icon}
+                alt={item.label}
+                width={50}
+                height={50}
+                className="object-contain"
+              />
               <span>{item.label}</span>
             </a>
           ))}
@@ -108,8 +113,22 @@ export default function VerAbecedario() {
       </aside>
 
       {/* Contenido Principal */}
-      <div className="flex flex-col items-center justify-center min-h-screen w-full p-8 text-black bg-white">
-        <div className="bg-[#17a7e8] text-black font-semibold text-center rounded-lg p-4 shadow-lg text-2xl mb-6">
+      <div className="flex flex-col items-center justify-center min-h-screen w-full p-4 md:p-8 text-black bg-white">
+          {/* Botón de volver */}
+                      <button
+                        onClick={() => router.push("/jardin")}
+                        className="self-start mb-4 bg-gray-200 text-black px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all"
+                      >
+                        <Image
+                          src="/flecha.png"
+                          alt="Volver"
+                          width={30}
+                          height={30}
+                          className="object-contain"
+                        />
+                      </button>
+
+        <div className="bg-[#17a7e8] text-black font-semibold text-center rounded-lg p-4 shadow-lg text-lg md:text-2xl mb-6">
           Aprende los colores para recolectar una flor que necesita Mani
         </div>
 
@@ -118,7 +137,7 @@ export default function VerAbecedario() {
           Progreso: {progreso} / {videos.length}
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
           {/* Video principal */}
           <video
             src={videos[index].text}
@@ -133,7 +152,7 @@ export default function VerAbecedario() {
             key={index}
             src={videos[index].src.replace(".mp4", ".png")}
             alt="Imagen del color"
-            className="w-60 h-100 object-cover rounded-lg shadow-lg border-4 border-white"
+            className="w-40 h-40 md:w-60 md:h-60 object-cover rounded-lg shadow-lg border-4 border-white"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -144,7 +163,7 @@ export default function VerAbecedario() {
         <div className="flex gap-4 mt-6">
           <button
             onClick={anteriorVideo}
-            className={`bg-gray-500 text-black px-6 py-3 rounded-lg shadow-md transition-all ${
+            className={`bg-gray-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg shadow-md transition-all ${
               index === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-600"
             }`}
             disabled={index === 0}
@@ -154,7 +173,7 @@ export default function VerAbecedario() {
 
           <button
             onClick={siguienteVideo}
-            className="bg-[#17a7e8] text-black px-6 py-3 rounded-lg shadow-md transition-all"
+            className="bg-[#17a7e8] text-white px-4 py-2 md:px-6 md:py-3 rounded-lg shadow-md hover:bg-blue-500 transition-all"
           >
             Siguiente
           </button>
@@ -165,7 +184,7 @@ export default function VerAbecedario() {
           <div className="mt-4">
             <button
               onClick={completarRegistro}
-              className="bg-[#69FF37] text-black px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition-all"
+              className="bg-[#69FF37] text-black px-4 py-2 md:px-6 md:py-3 rounded-lg shadow-md hover:bg-green-600 transition-all"
             >
               Completado
             </button>
@@ -175,10 +194,16 @@ export default function VerAbecedario() {
         {/* MODAL */}
         {mostrarModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-100 text-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2 text-center">
               <h2 className="text-xl font-bold text-green-600">¡Felicidades!</h2>
               <p className="mt-2 text-gray-700">Recogiste la primera flor.</p>
-              <img src="/flor.png" alt="Llave encontrada" className="mx-auto my-4 w-100 h-80" />
+              <Image
+                src="/flor.png"
+                alt="Llave encontrada"
+                width={200}
+                height={200}
+                className="mx-auto my-4"
+              />
               <p className="mt-2 text-gray-700">Ahora debemos recoger más</p>
               <button
                 onClick={cerrarModalYRedirigir}

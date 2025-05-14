@@ -12,6 +12,7 @@ const menuItems = [
 export default function Cuentos() {
   const [cuentos, setCuentos] = useState<any[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchCuentos() {
@@ -29,15 +30,31 @@ export default function Cuentos() {
   }, []);
 
   return (
-    <div className="flex">
-      <aside className="w-48 h-screen bg-white border-r flex flex-col items-center py-10">
-        
+    <div className="flex flex-col md:flex-row relative">
+      {/* Botón de menú móvil */}
+      <button
+        className="md:hidden p-4 bg-[#69FF37] text-white font-bold"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        {menuOpen ? "Cerrar Menú" : "Abrir Menú"}
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={`${
+          menuOpen ? "block" : "hidden"
+        } md:block absolute md:relative z-50 w-48 h-screen bg-white border-r flex flex-col items-center py-10`}
+      >
         <Image src="/logo.png" alt="Logo El Mundo de las Señas" width={120} height={120} />
         <h2 className="text-center font-semibold text-[#69FF37]">SeñaVerso</h2>
         <h3 className="text-center text-[#69FF37] text-xs mb-8">Explora el mundo en señas</h3>
         <nav className="w-full flex flex-col items-start px-6 space-y-8 mb-6">
           {menuItems.map((item) => (
-            <a key={item.label} href={item.link} className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black">
+            <a
+              key={item.label}
+              href={item.link}
+              className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
+            >
               <Image src={item.icon} alt={item.label} width={50} height={50} className="object-contain" />
               <span>{item.label}</span>
             </a>
@@ -45,16 +62,16 @@ export default function Cuentos() {
         </nav>
       </aside>
 
-      <div className="flex-1 p-10 text-center font-bold text-2xl text-black mb-8">
+      {/* Contenido principal */}
+      <div className="flex-1 p-4 md:p-10 text-center">
         <h1 className="text-3xl font-bold text-[#69FF37] mb-8">Cuentos</h1>
 
         {cuentos.length === 0 ? (
           <p className="text-gray-500">Cargando cuentos...</p>
         ) : (
-          // Contenedor principal con la imagen centrada y los cuentos a los lados
-          <div className="flex justify-center items-center gap-6">
+          <div className="flex flex-col lg:flex-row justify-center items-center gap-6">
             {/* Lista de cuentos (izquierda) */}
-            <div className="flex-1 grid grid-cols-1 gap-6 text-center">
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6 text-center">
               {cuentos.slice(0, Math.ceil(cuentos.length / 2)).map((cuento, index) => (
                 <div
                   key={cuento._id || `cuento-izq-${index}`}
@@ -66,13 +83,19 @@ export default function Cuentos() {
               ))}
             </div>
 
-            {/* Imagen centrada con espacio hacia abajo */}
-            <div className="mb-10">
-              <img src="/cuento2.png" alt="Pirata" width={450} height={450} className="mx-auto" />
+            {/* Imagen centrada */}
+            <div className="mb-10 lg:mb-0">
+              <Image
+                src="/cuento2.png"
+                alt="Pirata"
+                width={450}
+                height={450}
+                className="mx-auto"
+              />
             </div>
 
             {/* Lista de cuentos (derecha) */}
-            <div className="flex-1 grid grid-cols-1 gap-6 text-center">
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6 text-center">
               {cuentos.slice(Math.ceil(cuentos.length / 2)).map((cuento, index) => (
                 <div
                   key={cuento._id || `cuento-der-${index}`}
@@ -90,7 +113,7 @@ export default function Cuentos() {
       {/* Modal para mostrar el video cuando se selecciona un cuento */}
       {selectedVideo && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-4 w-full max-w-6xl relative">
+          <div className="bg-white rounded-2xl p-4 w-11/12 md:w-3/4 lg:w-1/2 relative">
             <button
               className="absolute top-2 right-2 text-red-500 font-bold text-2xl"
               onClick={() => setSelectedVideo(null)}
@@ -101,7 +124,7 @@ export default function Cuentos() {
               <iframe
                 className="w-full h-full rounded-lg"
                 src={`https://www.youtube.com/embed/${selectedVideo}`}
-                title="Video de canción"
+                title="Video de cuento"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

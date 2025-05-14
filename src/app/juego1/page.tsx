@@ -107,7 +107,8 @@ export default function MemoryGame() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
+      {/* Botón de volver */}
       <button
         onClick={() => router.push("/isla")}
         className="absolute top-4 right-4 text-black px-2 py-2 rounded-lg transition-all"
@@ -120,7 +121,9 @@ export default function MemoryGame() {
           className="object-contain"
         />
       </button>
-      <aside className="w-48 h-screen bg-white border-r flex flex-col items-center py-10">
+
+      {/* Sidebar */}
+      <aside className="hidden md:block w-48 h-screen bg-white border-r flex flex-col items-center py-10">
         <Image src="/logo.png" alt="Logo El Mundo de las Señas" width={120} height={120} />
         <h2 className="text-center font-semibold text-[#69FF37]">SeñaVerso</h2>
         <h3 className="text-center text-[#69FF37] text-xs mb-8">Explora el mundo en señas</h3>
@@ -134,12 +137,30 @@ export default function MemoryGame() {
         </nav>
       </aside>
 
-      <div className="flex flex-1 justify-between p-20">
-        {/* Left Section: Text and Game */}
-        <div className="flex flex-col items-center w-2/3">
-          <h1 className="text-black font-bold">Ayuda a Mani a encontrar diamantes de la isla</h1>
-          <h3 className="text-black font-bold">Debes realizar las parejas respectivas con cada seña y letra</h3>
-          <div className="grid grid-cols-3 gap-6 mt-8">
+      {/* Contenido principal */}
+      <div className="flex flex-col md:flex-row flex-1 p-4 md:p-10">
+          {/* Botón de volver */}
+                      <button
+                        onClick={() => router.push("/isla")}
+                        className="self-start mb-4 bg-gray-200 text-black px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all"
+                      >
+                        <Image
+                          src="/flecha.png"
+                          alt="Volver"
+                          width={30}
+                          height={30}
+                          className="object-contain"
+                        />
+                      </button>
+        {/* Sección izquierda: Juego */}
+        <div className="flex flex-col items-center w-full md:w-2/3">
+          <h1 className="text-black font-bold text-center">
+            Ayuda a Mani a encontrar diamantes de la isla
+          </h1>
+          <h3 className="text-black font-bold text-center">
+            Debes realizar las parejas respectivas con cada seña y letra
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
             {letters.map((card) => (
               <MemoryCard
                 key={card.id}
@@ -154,36 +175,39 @@ export default function MemoryGame() {
           </div>
         </div>
 
-        {/* Right Section: Large Image */}
-        <div className="flex items-center justify-center w-1/3">
+        {/* Sección derecha: Imagen grande */}
+        <div className="flex items-center justify-center w-full md:w-1/3 mt-8 md:mt-0">
           <Image
             src="/piratamani.png"
             alt="Imagen grande"
-            width={600}
-            height={600}
+            width={400}
+            height={400}
             className="object-contain"
           />
         </div>
       </div>
 
-        {showMessage && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center">
-          <Image src="/diamantes.png" alt="¡Felicidades!" width={100} height={100} className="mb-4" />
-          <h2 className="text-2xl font-bold text-black">¡Felicidades!</h2>
-          <p className="text-black">Logramos encontrar todos los diamantes. Completaste la misión</p>
-          <button
-            className="mt-4 px-4 py-2 bg-[#facc17] text-white rounded"
-            onClick={handleCloseMessage}
-          >
-            Cerrar
-          </button>
-            </div>
-          </div>
-        )}
-        {showPairMessage && (
+      {/* Modal de éxito */}
+      {showMessage && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg text-center flex flex-col items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col items-center w-11/12 md:w-1/2">
+            <Image src="/diamantes.png" alt="¡Felicidades!" width={100} height={100} className="mb-4" />
+            <h2 className="text-2xl font-bold text-black">¡Felicidades!</h2>
+            <p className="text-black">Logramos encontrar todos los diamantes. Completaste la misión</p>
+            <button
+              className="mt-4 px-4 py-2 bg-[#facc17] text-white rounded"
+              onClick={handleCloseMessage}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de pareja encontrada */}
+      {showPairMessage && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg text-center flex flex-col items-center w-11/12 md:w-1/3">
             <Image src="/diamante.png" alt="¡Acierto!" width={100} height={100} className="mb-4" />
             <h2 className="text-xl font-bold text-black">¡Encontraste un diamante!</h2>
           </div>
@@ -201,23 +225,21 @@ interface MemoryCardProps {
 
 function MemoryCard({ card, flipped, onFlip }: MemoryCardProps) {
   return (
-    <div className="flex">
-      <motion.div
-        className="w-24 h-24 border-2 rounded-lg flex items-center justify-center cursor-pointer bg-yellow-400"
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.5 }}
-        onClick={onFlip}
-      >
-        {flipped ? (
-          card.type === "letter" ? (
-            <span className="text-xl font-bold">{card.content}</span>
-          ) : (
-            <img src={card.content} alt="Seña" className="w-16" />
-          )
+    <motion.div
+      className="w-24 h-24 border-2 rounded-lg flex items-center justify-center cursor-pointer bg-yellow-400"
+      animate={{ rotateY: flipped ? 180 : 0 }}
+      transition={{ duration: 0.5 }}
+      onClick={onFlip}
+    >
+      {flipped ? (
+        card.type === "letter" ? (
+          <span className="text-xl font-bold">{card.content}</span>
         ) : (
-          <span className="text-black">?</span>
-        )}
-      </motion.div>
-    </div>
+          <img src={card.content} alt="Seña" className="w-16" />
+        )
+      ) : (
+        <span className="text-black">?</span>
+      )}
+    </motion.div>
   );
 }

@@ -210,17 +210,17 @@ function MemoryCard({ card, flipped, onFlip }: MemoryCardProps) {
 
   return (
     <motion.div
-      className={`w-24 h-24 border-4 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e] transition-all ${
+      className={`w-32 h-32 border-4 rounded-lg flex items-center justify-center cursor-pointer bg-[#a2845e] transition-all ${
         isSelected ? "border-[#69FF37] shadow-lg" : "border-gray-300"
       }`}
       onClick={onFlip}
     >
       {card.type === "letter" ? (
-        <img src={card.content} alt="Imagen" className="w-20 h-20 object-contain" />
+        <img src={card.content} alt="Imagen" className="w-28 h-28 object-contain" />
       ) : (
         <video
           src={card.content}
-          className="w-20 h-20 object-contain"
+          className="w-28 h-28 object-contain"
           autoPlay
           loop
           muted

@@ -12,7 +12,6 @@ type Question = {
 };
 
 const allQuizData: Question[] = [
-  { video: "/caballo.mp4", options: ["/burro.png", "caballito.png", "/oveja.png"], answer: "/caballo.png" },
   { video: "/conejo.mp4", options: ["/conejo.png", "/gato.png", "/gallina.png"], answer: "/conejo.png" },
   { video: "/mariposa.mp4", options: ["/perro.png", "/cerdo.png", "/mariposa.png"], answer: "/mariposa.png" },
   { video: "/oveja.mp4", options: ["/gallo.png", "/oveja.png", "/conejo.png"], answer: "/oveja.png" },
@@ -57,7 +56,7 @@ export default function Quiz() {
       method: "POST",
       body: JSON.stringify({
         leccion: "Quiz 2.2",
-        categoria: "colores",
+        categoria: "animales",
       }),
       headers: { "Content-Type": "application/json" },
     });

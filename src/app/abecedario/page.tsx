@@ -101,13 +101,7 @@ export default function VerAbecedario() {
           menuOpen ? "block" : "hidden"
         } md:block absolute md:relative z-50 w-48 h-screen bg-white border-r flex flex-col items-center py-10`}
       >
-        <Image
-          src="/logo.png"
-          alt="Logo El Mundo de las Señas"
-          width={120}
-          height={120}
-          className="mb-10"
-        />
+  
         <nav className="w-full flex flex-col items-start px-4 space-y-8">
           {menuItems.map((item) => (
             <a

@@ -108,19 +108,7 @@ export default function MemoryGame() {
 
   return (
     <div className="flex flex-col md:flex-row">
-      {/* Botón de volver */}
-      <button
-        onClick={() => router.push("/isla")}
-        className="absolute top-4 right-4 text-black px-2 py-2 rounded-lg transition-all"
-      >
-        <Image
-          src="/flecha.png"
-          alt="Volver"
-          width={70}
-          height={70}
-          className="object-contain"
-        />
-      </button>
+
 
       {/* Sidebar */}
       <aside className="hidden md:block w-48 h-screen bg-white border-r flex flex-col items-center py-10">

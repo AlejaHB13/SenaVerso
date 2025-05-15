@@ -155,7 +155,7 @@ export default function VerAnimales() {
             key={index}
             src={videos[index].src.replace(".mp4", ".png")} // Cambia el video a una imagen (asumiendo que las imágenes tienen el mismo nombre pero con extensión .png)
             alt="Imagen del animal"
-            className="w-40 h-40 md:w-60 md:h-60 object-cover rounded-lg shadow-lg border-4 border-white"
+            className="w-40 h-40 md:w-60 md:h-60 object-contain rounded-lg shadow-lg border-4 border-white" // Cambiado a object-contain
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -176,7 +176,7 @@ export default function VerAnimales() {
 
           <button
             onClick={siguienteVideo}
-            className="bg-[#a2845e] text-white px-4 py-2 md:px-6 md:py-3 rounded-lg shadow-md hover:bg-yellow-500 transition-all"
+            className="bg-[#a2845e] text-white px-4 py-2 md:px-6 md:py-3 rounded-lg shadow-md  transition-all"
           >
             Siguiente
           </button>

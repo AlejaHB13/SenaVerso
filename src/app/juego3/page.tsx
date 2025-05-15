@@ -20,12 +20,12 @@ interface GameState {
 }
 
 const letters: Card[] = [
-  { id: "A", type: "letter", content: "/morado.png" },
-  { id: "B", type: "letter", content: "/naranja.png" },
-  { id: "C", type: "letter", content: "/negro.png" },
-  { id: "C-sign", type: "sign", content: "/negro.mp4", pair: "C" },
-  { id: "A-sign", type: "sign", content: "/morado.mp4", pair: "A" },
-  { id: "B-sign", type: "sign", content: "/naranja.mp4", pair: "B" },
+  { id: "morado", type: "letter", content: "/morado.png" },
+  { id: "naranja", type: "letter", content: "/naranja.png" },
+  { id: "negro", type: "letter", content: "/negro.png" },
+  { id: "C-sign", type: "sign", content: "/negro.mp4", pair: "negro" },
+  { id: "A-sign", type: "sign", content: "/morado.mp4", pair: "morado" },
+  { id: "B-sign", type: "sign", content: "/naranja.mp4", pair: "naranja" },
 ];
 
 const useGameStore = create<GameState>((set) => ({
@@ -57,10 +57,10 @@ export default function MemoryGame() {
       const [first, second] = flipped;
 
       if (
-        (first.type === "letter" && second.pair === first.content) ||
-        (second.type === "letter" && first.pair === second.content)
+        (first.type === "letter" && second.pair === first.id) ||
+        (second.type === "letter" && first.pair === second.id)
       ) {
-        addMatch(first.content);
+        addMatch(first.id); // Asegúrate de usar `first.id` para registrar el match
         setCurrentPairMessage({
           message: "Lograste plantar una flor",
           image: "/flor.png",

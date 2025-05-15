@@ -141,7 +141,7 @@ function ProfilePage() {
                             >
                               <h4 className="text-md font-medium text-gray-800">
                                 {p.leccion}{" "}
-                                {p.completado ? "✅" : "❌"}
+                                {p.completado ? "✅" : "✅"}
                               </h4>
                               {p.actividades.length > 0 && (
                                 <ul className="mt-2 text-gray-700 text-sm">

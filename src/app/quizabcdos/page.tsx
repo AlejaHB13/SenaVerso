@@ -12,12 +12,12 @@ type Question = {
 };
 
 const allQuizData: Question[] = [
-  { letter: "W", options: ["W", "M", "A"], answer: "W" },
-  { letter: "C", options: ["C", "Z", "O"], answer: "C" },
-  { letter: "M", options: ["A", "M", "N"], answer: "M" },
-  { letter: "P", options: ["P", "Q", "R"], answer: "P" },
-  { letter: "T", options: ["T", "U", "V"], answer: "T" },
-  { letter: "G", options: ["G", "H", "J"], answer: "G" },
+  { letter: "A", options: ["W", "M", "A"], answer: "A" },
+  { letter: "B", options: ["C", "B", "O"], answer: "B" },
+  { letter: "F", options: ["F", "M", "N"], answer: "F" },
+  { letter: "M", options: ["P", "M", "R"], answer: "M" },
+  { letter: "O", options: ["T", "U", "O"], answer: "O" },
+  { letter: "L", options: ["L", "H", "J"], answer: "L" },
 ];
 
 export default function Quiz() {
@@ -26,6 +26,7 @@ export default function Quiz() {
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
   const [completed, setCompleted] = useState<boolean>(false);
   const [mostrarModal, setMostrarModal] = useState<boolean>(false);
+  const [modalContent, setModalContent] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -39,13 +40,20 @@ export default function Quiz() {
 
   const handleNext = () => {
     if (selectedAnswers[currentQuestion] === shuffledQuiz[currentQuestion].answer) {
-      if (currentQuestion + 1 < shuffledQuiz.length) {
-        setCurrentQuestion(currentQuestion + 1);
-      } else {
-        completarRegistro();
-      }
+      setModalContent({ message: "¡Respuesta correcta! Continúa con la siguiente pregunta.", type: "success" });
+      setTimeout(() => {
+        setModalContent(null);
+        if (currentQuestion + 1 < shuffledQuiz.length) {
+          setCurrentQuestion(currentQuestion + 1);
+        } else {
+          completarRegistro();
+        }
+      }, 1500);
     } else {
-      alert("Respuesta incorrecta. Intenta de nuevo.");
+      setModalContent({ message: "Respuesta incorrecta. Intenta de nuevo.", type: "error" });
+      setTimeout(() => {
+        setModalContent(null);
+      }, 1500);
     }
   };
 
@@ -78,20 +86,6 @@ export default function Quiz() {
 
   return (
     <div className="flex flex-col md:flex-row">
-        {/* Botón de volver */}
-                    <button
-                      onClick={() => router.push("/isla")}
-                      className="self-start mb-4 bg-gray-200 text-black px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all"
-                    >
-                      <Image
-                        src="/flecha.png"
-                        alt="Volver"
-                        width={30}
-                        height={30}
-                        className="object-contain"
-                      />
-                    </button>
-
       {/* Sidebar */}
       <aside className="hidden md:block w-48 h-screen bg-white border-r flex flex-col items-center py-10">
         <Image
@@ -123,9 +117,43 @@ export default function Quiz() {
 
       {/* Contenido principal */}
       <div className="flex flex-col items-center justify-center min-h-screen w-full p-8 text-black bg-white">
+        {/* Botón de volver */}
+        <button
+          onClick={() => router.push("/isla")}
+          className="self-start mb-4 bg-gray-200 text-black px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all"
+        >
+          <Image
+            src="/flecha.png"
+            alt="Volver"
+            width={30}
+            height={30}
+            className="object-contain"
+          />
+        </button>
+
         <div className="bg-yellow-400 text-black font-semibold text-center rounded-lg p-4 shadow-lg text-2xl mb-6">
           Resuelve estas preguntas para encontrar la llave del tesoro
         </div>
+
+        {/* Modal dinámico */}
+        {modalContent && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div
+              className={`bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/3 text-center ${
+                modalContent.type === "success" ? "border-green-500" : "border-red-500"
+              }`}
+            >
+              <h2
+                className={`text-xl font-bold ${
+                  modalContent.type === "success" ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {modalContent.message}
+              </h2>
+            </div>
+          </div>
+        )}
+
         {!completed && shuffledQuiz.length > 0 && (
           <div className="bg-white p-6 rounded-lg shadow-lg text-center w-full max-w-2xl">
             <h2 className="text-2xl font-bold mb-4">
@@ -161,7 +189,7 @@ export default function Quiz() {
           </div>
         )}
 
-        {/* Modal */}
+        {/* Modal final */}
         {mostrarModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/2 text-center">

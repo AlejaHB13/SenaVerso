@@ -83,54 +83,58 @@ export default function Home() {
         </div>
       )}
 
-      {/* Menú desplegable */}
-      <div className="md:hidden fixed top-4 left-4 z-50">
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="bg-[#69FF37] text-black px-4 py-2 rounded-lg shadow-md"
-        >
-          Menú
-        </button>
-        {isMenuOpen && (
-          <div className="absolute top-12 left-0 bg-white border rounded-lg shadow-lg w-48">
-            <nav className="flex flex-col items-start p-4 space-y-4">
-              {menuItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.link}
-                  className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
-                >
-                  <Image
-                    src={item.icon}
-                    alt={item.label}
-                    width={30}
-                    height={30}
-                    className="object-contain"
-                  />
-                  <span>{item.label}</span>
-                </a>
-              ))}
-            </nav>
-          </div>
-        )}
-      </div>
-
-      {/* Sidebar para pantallas grandes */}
-      <aside className="hidden md:flex w-48 h-screen bg-white border-r flex-col items-center py-8">
-        <Image src="/logo.png" alt="Logo" width={120} height={120} className="mb-10" />
-        <nav className="w-full flex flex-col items-start px-4 space-y-8">
-          {menuItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.link}
-              className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
-            >
-              <Image src={item.icon} alt={item.label} width={50} height={50} className="object-contain" />
-              <span>{item.label}</span>
-            </a>
-          ))}
-        </nav>
-      </aside>
+     {/* Menú desplegable */}
+                 <div className="md:hidden fixed top-0 left-0 w-full z-50 flex justify-center mt-4">
+                 <button
+                   onClick={() => setIsMenuOpen(!isMenuOpen)}
+                   className="bg-[#69FF37] text-black px-4 py-2 rounded-lg shadow-md"
+                 >
+                   Menú
+                 </button>
+                 {isMenuOpen && (
+                   <div className="absolute top-16 left-0 bg-white border rounded-lg shadow-lg w-48">
+                   <nav className="flex flex-col items-start p-4 space-y-4">
+                     {menuItems.map((item) => (
+                     <a
+                       key={item.label}
+                       href={item.link}
+                       className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
+                     >
+                       <Image
+                       src={item.icon}
+                       alt={item.label}
+                       width={30}
+                       height={30}
+                       className="object-contain"
+                       />
+                       <span>{item.label}</span>
+                     </a>
+                     ))}
+                   </nav>
+                   </div>
+                 )}
+                 </div>
+           
+                 {/* Espaciado para evitar contenido encima del botón */}
+                 <div className="md:hidden h-20"></div>
+           
+                 {/* Sidebar para pantallas grandes */}
+                 <aside className="hidden md:flex w-48 h-screen bg-white border-r flex-col items-center py-8">
+                 <Image src="/logo.png" alt="Logo" width={120} height={120} className="mb-10" />
+                 <nav className="w-full flex flex-col items-start px-4 space-y-8">
+                   {menuItems.map((item) => (
+                   <a
+                     key={item.label}
+                     href={item.link}
+                     className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
+                   >
+                     <Image src={item.icon} alt={item.label} width={50} height={50} className="object-contain" />
+                     <span>{item.label}</span>
+                   </a>
+                   ))}
+                 </nav>
+                 </aside>
+     
 
       {/* Contenido Principal */}
       <div className="flex flex-col items-center justify-center min-h-screen w-full p-8 text-black">

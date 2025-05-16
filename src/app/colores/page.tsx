@@ -25,6 +25,7 @@ export default function VerColores() {
   const [progreso, setProgreso] = useState(1);
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const siguienteVideo = () => {
     if (index < videos.length - 1) {
@@ -71,59 +72,68 @@ export default function VerColores() {
 
   return (
     <div className="flex flex-col md:flex-row relative">
-      {/* Botón de menú móvil */}
-      <button
-        className="md:hidden p-4 bg-[#69FF37] text-white font-bold"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        {menuOpen ? "Cerrar Menú" : "Abrir Menú"}
-      </button>
-
-      {/* Sidebar */}
-      <aside
-        className={`${
-          menuOpen ? "block" : "hidden"
-        } md:block absolute md:relative z-50 w-48 h-screen bg-white border-r flex flex-col items-center py-10`}
-      >
-        <Image
-          src="/logo.png"
-          alt="Logo El Mundo de las Señas"
-          width={120}
-          height={120}
-          className="mb-10"
-        />
-        <nav className="w-full flex flex-col items-start px-4 space-y-8">
-          {menuItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.link}
-              className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
-            >
-              <Image
-                src={item.icon}
-                alt={item.label}
-                width={50}
-                height={50}
-                className="object-contain"
-              />
-              <span>{item.label}</span>
-            </a>
-          ))}
-        </nav>
-      </aside>
-
+    {/* Menú desplegable */}
+    <div className="md:hidden fixed top-0 left-0 w-full z-50 flex justify-center mt-4">
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="bg-[#69FF37] text-black px-4 py-2 rounded-lg shadow-md"
+                >
+                  Menú
+                </button>
+                {isMenuOpen && (
+                  <div className="absolute top-16 left-0 bg-white border rounded-lg shadow-lg w-48">
+                  <nav className="flex flex-col items-start p-4 space-y-4">
+                    {menuItems.map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.link}
+                      className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
+                    >
+                      <Image
+                      src={item.icon}
+                      alt={item.label}
+                      width={30}
+                      height={30}
+                      className="object-contain"
+                      />
+                      <span>{item.label}</span>
+                    </a>
+                    ))}
+                  </nav>
+                  </div>
+                )}
+                </div>
+          
+                {/* Espaciado para evitar contenido encima del botón */}
+                <div className="md:hidden h-20"></div>
+          
+                {/* Sidebar para pantallas grandes */}
+                <aside className="hidden md:flex w-48 h-screen bg-white border-r flex-col items-center py-8">
+                <Image src="/logo.png" alt="Logo" width={120} height={120} className="mb-10" />
+                <nav className="w-full flex flex-col items-start px-4 space-y-8">
+                  {menuItems.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.link}
+                    className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
+                  >
+                    <Image src={item.icon} alt={item.label} width={50} height={50} className="object-contain" />
+                    <span>{item.label}</span>
+                  </a>
+                  ))}
+                </nav>
+                </aside>
       {/* Contenido Principal */}
       <div className="flex flex-col items-center justify-center min-h-screen w-full p-4 md:p-8 text-black bg-white">
           {/* Botón de volver */}
                       <button
                         onClick={() => router.push("/jardin")}
-                        className="self-start mb-4 bg-gray-200 text-black px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all"
-                      >
+                        className="self-end mb-4 px-4 py-2 transition-all "                      >
                         <Image
                           src="/flecha.png"
                           alt="Volver"
-                          width={30}
-                          height={30}
+                          width={70}
+                          height={70}
                           className="object-contain"
                         />
                       </button>

@@ -6,6 +6,7 @@ import Link from "next/link";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const places = [
     {
@@ -39,49 +40,56 @@ export default function Home() {
 
   return (
     <div className="flex flex-col md:flex-row">
-      {/* Mobile Menu Button */}
+      {/* Menú desplegable */}
+      <div className="md:hidden fixed top-0 left-0 w-full z-50 flex justify-center mt-4">
       <button
-        className="md:hidden p-4 bg-[#69FF37] text-white font-bold"
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className="bg-[#69FF37] text-black px-4 py-2 rounded-lg shadow-md"
       >
-        {menuOpen ? "Cerrar Menú" : "Abrir Menú"}
+        Menú
       </button>
-
-      {/* Sidebar */}
-      <aside
-        className={`${
-          menuOpen ? "block" : "hidden"
-        } md:block absolute md:relative z-50 w-48 h-screen bg-white border-r flex flex-col items-center py-10`}
-      >
-        <Image
-          src="/logo.png"
-          alt="Logo El Mundo de las Señas"
-          width={100}
-          height={100}
-        />
-        <h2 className="text-center font-semibold text-[#69FF37]">SeñaVerso</h2>
-        <h3 className="text-center text-[#69FF37] text-xs mb-8">
-          Explora el mundo en señas
-        </h3>
-
-        <nav className="w-full flex flex-col items-start px-6 space-y-8 mb-6">
+      {isMenuOpen && (
+        <div className="absolute top-16 left-0 bg-white border rounded-lg shadow-lg w-48">
+        <nav className="flex flex-col items-start p-4 space-y-4">
           {menuItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.link}
-              className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
-            >
-              <Image
-                src={item.icon}
-                alt={item.label}
-                width={50}
-                height={50}
-                className="object-contain"
-              />
-              <span>{item.label}</span>
-            </a>
+          <a
+            key={item.label}
+            href={item.link}
+            className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
+          >
+            <Image
+            src={item.icon}
+            alt={item.label}
+            width={30}
+            height={30}
+            className="object-contain"
+            />
+            <span>{item.label}</span>
+          </a>
           ))}
         </nav>
+        </div>
+      )}
+      </div>
+
+      {/* Espaciado para evitar contenido encima del botón */}
+      <div className="md:hidden h-20"></div>
+
+      {/* Sidebar para pantallas grandes */}
+      <aside className="hidden md:flex w-48 h-screen bg-white border-r flex-col items-center py-8">
+      <Image src="/logo.png" alt="Logo" width={120} height={120} className="mb-10" />
+      <nav className="w-full flex flex-col items-start px-4 space-y-8">
+        {menuItems.map((item) => (
+        <a
+          key={item.label}
+          href={item.link}
+          className="flex items-center space-x-2 text-[#69FF37] font-medium text-sm hover:text-black"
+        >
+          <Image src={item.icon} alt={item.label} width={50} height={50} className="object-contain" />
+          <span>{item.label}</span>
+        </a>
+        ))}
+      </nav>
       </aside>
 
       {/* Main content */}

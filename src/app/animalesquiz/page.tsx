@@ -27,6 +27,7 @@ export default function Quiz() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   useEffect(() => {
     const shuffled = [...allQuizData].sort(() => Math.random() - 0.5).slice(0, 3);
@@ -39,14 +40,20 @@ export default function Quiz() {
 
   const handleNext = () => {
     if (selectedAnswers[currentQuestion] === shuffledQuiz[currentQuestion].answer) {
-      alert("¡Respuesta correcta!");
-      if (currentQuestion + 1 < shuffledQuiz.length) {
-        setCurrentQuestion(currentQuestion + 1);
-      } else {
-        completarRegistro();
-      }
+      setModalContent({ message: "¡Respuesta correcta! Continúa con la siguiente pregunta.", type: "success" });
+      setTimeout(() => {
+        setModalContent(null);
+        if (currentQuestion + 1 < shuffledQuiz.length) {
+          setCurrentQuestion(currentQuestion + 1);
+        } else {
+          completarRegistro();
+        }
+      }, 1500);
     } else {
-      alert("Respuesta incorrecta. Intenta de nuevo.");
+      setModalContent({ message: "Respuesta incorrecta. Intenta de nuevo.", type: "error" });
+      setTimeout(() => {
+        setModalContent(null);
+      }, 1500);
     }
   };
 
@@ -158,19 +165,19 @@ export default function Quiz() {
             </h2>
             <div className="flex justify-center items-center mb-4">
               <Image
-                src={`/${shuffledQuiz[currentQuestion].image}`}
-                alt="Pregunta"
-                width={300}
-                height={300}
-                className="mb-4"
+          src={`/${shuffledQuiz[currentQuestion].image}`}
+          alt="Pregunta"
+          width={300}
+          height={300}
+          className="mb-4"
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
               {shuffledQuiz[currentQuestion].options.map((option) => (
                 <motion.button
                   key={option}
                   onClick={() => handleSelect(option)}
-                  className={`p-2 border-2 rounded-lg ${
+                  className={`p-4 border-4 rounded-lg ${
                     selectedAnswers[currentQuestion] === option ? "border-blue-500" : "border-gray-300"
                   }`}
                   whileHover={{ scale: 1.1 }}
@@ -178,9 +185,7 @@ export default function Quiz() {
                   <video
                     src={`/${option}`}
                     controls
-                    className="rounded-md"
-                    width={150}
-                    height={150}
+                    className="rounded-lg w-full h-auto"
                   />
                 </motion.button>
               ))}
@@ -214,6 +219,18 @@ export default function Quiz() {
             </div>
           </div>
         )}
+
+        {modalContent && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div
+      className={`p-6 rounded-lg shadow-lg text-center ${
+        modalContent.type === "success" ? "bg-green-500 text-white" : "bg-red-500 text-white"
+      }`}
+    >
+      <p className="text-lg font-bold">{modalContent.message}</p>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );

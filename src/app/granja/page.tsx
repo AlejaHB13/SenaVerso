@@ -168,7 +168,7 @@ export default function Home() {
                 />
               </div>
             </Link>
-            <Link href="/animales" className="absolute top-[32%] left-[6%] hover:scale-110 transition-transform">
+            <Link href="/animales" className="absolute top-[32%] left-[2%] hover:scale-110 transition-transform">
               <div className="p-4 rounded-full drop-shadow-lg hover:animate-pulse hover:brightness-125">
                 <Image
                   src="/caballo.png"

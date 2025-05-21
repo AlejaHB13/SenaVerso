@@ -195,7 +195,7 @@ export default function Quiz() {
                   }`}
                   whileHover={{ scale: 1.1 }}
                 >
-                  <img src={option} alt="Option" className="w-full h-20 object-contain" />
+                  <img src={option} alt="Option" className="w-full h-100 md:h-100 object-contain" />
                 </motion.button>
               ))}
             </div>

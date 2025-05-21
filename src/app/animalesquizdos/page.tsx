@@ -28,6 +28,7 @@ export default function Quiz() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   useEffect(() => {
     const shuffled = [...allQuizData].sort(() => Math.random() - 0.5).slice(0, 3);
@@ -40,15 +41,20 @@ export default function Quiz() {
 
   const handleNext = () => {
     if (selectedAnswers[currentQuestion] === shuffledQuiz[currentQuestion].answer) {
-      alert("¡Respuesta correcta!");
-
-      if (currentQuestion + 1 < shuffledQuiz.length) {
-        setCurrentQuestion(currentQuestion + 1);
-      } else {
-        completarRegistro();
-      }
+      setModalContent({ message: "¡Respuesta correcta! Continúa con la siguiente pregunta.", type: "success" });
+      setTimeout(() => {
+        setModalContent(null);
+        if (currentQuestion + 1 < shuffledQuiz.length) {
+          setCurrentQuestion(currentQuestion + 1);
+        } else {
+          completarRegistro();
+        }
+      }, 1500);
     } else {
-      alert("Respuesta incorrecta. Intenta de nuevo.");
+      setModalContent({ message: "Respuesta incorrecta. Intenta de nuevo.", type: "error" });
+      setTimeout(() => {
+        setModalContent(null);
+      }, 1500);
     }
   };
 
@@ -206,6 +212,18 @@ export default function Quiz() {
               >
                 Aceptar
               </button>
+            </div>
+          </div>
+        )}
+
+        {modalContent && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div
+              className={`p-6 rounded-lg shadow-lg text-center ${
+                modalContent.type === "success" ? "bg-green-500 text-white" : "bg-red-500 text-white"
+              }`}
+            >
+              <p className="text-lg font-bold">{modalContent.message}</p>
             </div>
           </div>
         )}

@@ -263,7 +263,7 @@ function MemoryCard({ card, flipped, onFlip }: MemoryCardProps) {
         card.type === "letter" ? (
           <span className="text-xl font-bold">{card.content}</span>
         ) : (
-          <img src={card.content} alt="Seña" className="w-16" />
+          <img src={card.content} alt="Seña" className="w-30" />
         )
       ) : (
         <span className="text-black">?</span>
